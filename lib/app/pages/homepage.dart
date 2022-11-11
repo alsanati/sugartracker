@@ -2,10 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_quickstart/app/components/avatar.dart';
 import 'package:supabase_quickstart/app/components/getSugarData.dart';
-import 'package:supabase_quickstart/app/components/test.dart';
-import 'package:supabase_quickstart/app/pages/account_page.dart';
 import 'package:supabase_quickstart/constants.dart';
 
 class Homepage extends StatefulWidget {
