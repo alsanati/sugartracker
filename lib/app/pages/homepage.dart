@@ -69,57 +69,71 @@ class _HomepageState extends State<Homepage> {
             future: _userName,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               List<Widget> children;
-              children = <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Hi, ${snapshot.data}",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Text("Mittwoch",
+              if (snapshot.hasData) {
+                children = <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Hi, ${snapshot.data}",
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                                      color: Colors.black,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Text("Mittwoch",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold)),
+                              ],
                             ),
-                            padding: EdgeInsets.all(10),
-                            child: Icon(
-                              Icons.settings,
-                              color: Colors.black,
-                            ),
-                          )
-                        ],
-                      ),
-                      Container(
-                        decoration: BoxDecoration(color: Colors.blue),
-                        padding: EdgeInsets.all(12),
-                        child: Row(children: [
-                          Icon(Icons.search),
-                          Text("Search"),
-                        ]),
-                      ),
-                      Column(children: [PostSugarLevels()])
-                    ],
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: EdgeInsets.all(10),
+                              child: Icon(
+                                Icons.settings,
+                                color: Colors.black,
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          decoration: BoxDecoration(color: Colors.blue),
+                          padding: EdgeInsets.all(12),
+                          child: Row(children: [
+                            Icon(Icons.search),
+                            Text("Search"),
+                          ]),
+                        ),
+                        Column(children: [PostSugarLevels()])
+                      ],
+                    ),
                   ),
-                ),
-              ];
+                ];
+              } else {
+                children = <Widget>[
+                  const SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Awaiting result...'),
+                  )
+                ];
+              }
               return Center(
                 child: Column(
                   children: children,
