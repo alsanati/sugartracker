@@ -47,10 +47,12 @@ class _HomepageState extends State<Homepage> {
     return _usernameController.text;
   }
 
+  late Future<String> _userName;
+
   @override
   void initState() {
     super.initState();
-    _getProfile();
+    _userName = _getProfile();
   }
 
   @override
@@ -64,58 +66,65 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<String>(
-            future: _getProfile(),
+            future: _userName,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Hi, $_getProfile()",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text("Mittwoch",
+              List<Widget> children;
+              children = <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Hi, ${snapshot.data}",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text("Mittwoch",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold)),
+                            ],
                           ),
-                          padding: EdgeInsets.all(10),
-                          child: Icon(
-                            Icons.settings,
-                            color: Colors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(color: Colors.blue),
-                      padding: EdgeInsets.all(12),
-                      child: Row(children: [
-                        Icon(Icons.search),
-                        Text("Search"),
-                      ]),
-                    ),
-                    Column(children: [PostSugarLevels()])
-                  ],
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                              Icons.settings,
+                              color: Colors.black,
+                            ),
+                          )
+                        ],
+                      ),
+                      Container(
+                        decoration: BoxDecoration(color: Colors.blue),
+                        padding: EdgeInsets.all(12),
+                        child: Row(children: [
+                          Icon(Icons.search),
+                          Text("Search"),
+                        ]),
+                      ),
+                      Column(children: [PostSugarLevels()])
+                    ],
+                  ),
+                ),
+              ];
+              return Center(
+                child: Column(
+                  children: children,
                 ),
               );
-              return const Center(child: CircularProgressIndicator());
             }),
       ),
     );
