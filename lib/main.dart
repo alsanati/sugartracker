@@ -9,12 +9,10 @@ import 'app/pages/homepage.dart';
 import 'constants.dart';
 
 Future<void> main() async {
-  await DotEnv().load(fileName: ".env");
-
   await Supabase.initialize(
     // TODO: Replace credentials with your own
-    url: dotenv.env['URL']!,
-    anonKey: dotenv.env['KEY']!,
+    url: Constants.supabaseUrl,
+    anonKey: Constants.supabaseAnonKey,
   );
   runApp(MyApp());
 }
