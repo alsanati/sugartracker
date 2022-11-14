@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_quickstart/constants.dart';
@@ -15,9 +13,7 @@ class PostSugarLevels extends StatefulWidget {
 
 class PostSugarLevelsState extends State<PostSugarLevels> {
   bool _isLoading = false;
-  bool _redirecting = false;
   final _sugarLevelController = TextEditingController();
-  late final StreamSubscription<AuthState> _authStateSubscription;
 
   Future<void> upload() async {
     setState(() {
@@ -54,7 +50,6 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Column(
       children: [
         TextFormField(
@@ -65,14 +60,7 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
               border: InputBorder.none,
               hintText: 'Enter your sugar level',
               isCollapsed: false),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
         ), // add elevated button here
-
         ElevatedButton(
           onPressed: upload,
           child: Text(_isLoading ? "Loading.. " : "Send"),

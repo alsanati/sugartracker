@@ -30,5 +30,3 @@ abstract class Constants {
     defaultValue: "",
   );
 }
-
-var test = "lol";
