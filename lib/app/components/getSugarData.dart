@@ -33,7 +33,7 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
       }
       await supabase
           .from('diabetes_sugar')
-          .insert({'personId': userId, 'sugarLevel': sugarLevels});
+          .insert({'personId': userId, 'sugar_level': sugarLevels});
       if (mounted) {
         context.showSnackBar(message: 'Successfully posted your sugar levels!');
       }
@@ -46,6 +46,12 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _sugarLevelController.dispose();
+    super.dispose();
   }
 
   @override

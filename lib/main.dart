@@ -6,6 +6,7 @@ import 'package:supabase_quickstart/app/pages/account_page.dart';
 import 'package:supabase_quickstart/app/pages/login_page.dart';
 import 'package:supabase_quickstart/app/pages/splash_page.dart';
 
+import 'app/components/bottomNav.dart';
 import 'app/pages/homepage.dart';
 import 'app/pages/signup_page.dart';
 import 'constants.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/account': (_) => const AccountPage(),
         "/home": (_) => const Homepage(),
         "/signup": (_) => const SignUpPage(),
+        "/nav": (_) => const BottomNav(),
       },
     );
   }

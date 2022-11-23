@@ -116,7 +116,6 @@ class _HomepageState extends State<Homepage> {
                           ]),
                         ),
                         Column(children: [PostSugarLevels()]),
-                        BottomNav()
                       ],
                     ),
                   ),

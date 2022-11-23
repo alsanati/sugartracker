@@ -25,7 +25,7 @@ class _SplashPageState extends State<SplashPage> {
     _redirectCalled = true;
     final session = supabase.auth.currentSession;
     if (session != null) {
-      Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushReplacementNamed('/nav');
     } else {
       Navigator.of(context).pushReplacementNamed('/login');
     }
