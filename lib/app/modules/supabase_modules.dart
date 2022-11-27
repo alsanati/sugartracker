@@ -1,11 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sugar_tracker/app/models/sugarData.dart';
 import 'package:supabase/supabase.dart';
-import 'package:supabase_quickstart/app/pages/homepage.dart';
-import 'package:supabase_quickstart/constants.dart';
+import 'package:sugar_tracker/app/pages/homepage.dart';
+import 'package:sugar_tracker/constants.dart';
 
 class SupabaseHelpers {
-  Future<void> signUpUser(context, {String? email, String? password}) async {
+  Future getSugarData() async {
+    final response = await supabase
+        .from('diabetes_sugar')
+        .select()
+        .eq('personId', supabase.auth.currentUser!.id)
+        .order('created_at', ascending: false);
+    return response;
+  }
+
+  Future<void> signUpUser(context, email, password) async {
     debugPrint("email: $email password: $password");
 
     try {

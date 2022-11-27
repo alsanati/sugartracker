@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_quickstart/app/pages/account_page.dart';
-import 'package:supabase_quickstart/app/pages/login_page.dart';
-import 'package:supabase_quickstart/app/pages/splash_page.dart';
+import 'package:sugar_tracker/app/pages/account_page.dart';
+import 'package:sugar_tracker/app/pages/login_page.dart';
+import 'package:sugar_tracker/app/pages/splash_page.dart';
 
 import 'app/components/bottomNav.dart';
 import 'app/pages/homepage.dart';

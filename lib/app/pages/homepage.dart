@@ -2,10 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_quickstart/app/components/getSugarData.dart';
-import 'package:supabase_quickstart/constants.dart';
-
-import '../components/bottomNav.dart';
+import 'package:sugar_tracker/app/components/getSugarData.dart';
+import 'package:sugar_tracker/constants.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

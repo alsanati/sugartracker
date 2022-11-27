@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:supabase_quickstart/constants.dart';
+import 'package:sugar_tracker/constants.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
