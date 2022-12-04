@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_quickstart/app/pages/account_page.dart';
-import 'package:supabase_quickstart/app/pages/homepage.dart';
+import 'package:sugar_tracker/app/components/chart.dart';
+import 'package:sugar_tracker/app/pages/account_page.dart';
+import 'package:sugar_tracker/app/pages/homepage.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -15,7 +16,7 @@ class _BottomNavState extends State<BottomNav> {
   static const List<Widget> _widgetOptions = <Widget>[
     Homepage(),
     AccountPage(),
-    Text('Index 2: School'),
+    Chart(),
   ];
 
   void _onItemTapped(int index) {

@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:sugar_tracker/app/components/posts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_quickstart/app/components/getSugarData.dart';
-import 'package:supabase_quickstart/constants.dart';
-
-import '../components/bottomNav.dart';
+import 'package:sugar_tracker/app/components/getSugarData.dart';
+import 'package:sugar_tracker/constants.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -115,7 +114,7 @@ class _HomepageState extends State<Homepage> {
                             Text("Search"),
                           ]),
                         ),
-                        Column(children: [PostSugarLevels()]),
+                        Column(children: [PostSugarLevels(), Posts()]),
                       ],
                     ),
                   ),

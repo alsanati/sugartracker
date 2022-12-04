@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_quickstart/app/modules/supabase_modules.dart';
+import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -83,14 +83,13 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: TextButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      _supabaseAuth.signUpUser(context,
-                          email: _emailController.text,
-                          password: _passwordController.text);
+                      _supabaseAuth.signUpUser(context, _emailController.text,
+                          _passwordController.text);
                     }
                   },
                   child: const Text(
                     'Sign Up',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ),
               ),

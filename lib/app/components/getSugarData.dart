@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_quickstart/constants.dart';
+import 'package:sugar_tracker/constants.dart';
 
 class PostSugarLevels extends StatefulWidget {
   const PostSugarLevels({super.key});
