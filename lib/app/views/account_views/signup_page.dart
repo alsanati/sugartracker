@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                   child: const Text(
                     'Sign Up',
-                    style: TextStyle(color: Colors.white, fontSize: 25),
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ),
               ),

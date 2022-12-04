@@ -21,29 +21,17 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
+  Future<void> _signIn(context, email, password) async {
     try {
-      await supabase.auth.signInWithOtp(
-        email: _emailController.text,
-        emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+      await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
       );
-      if (mounted) {
-        context.showSnackBar(message: 'Check your email for login link!');
-        _emailController.clear();
-      }
     } on AuthException catch (error) {
       context.showErrorSnackBar(message: error.message);
     } catch (error) {
       context.showErrorSnackBar(message: 'Unexpected error occurred');
     }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -82,7 +70,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-            onPressed: _isLoading ? null : _signIn,
+            onPressed:
+                _isLoading ? null : _signIn(context, _emailController.text, ''),
             child: Text(_isLoading ? 'Loading' : 'Send Magic Link'),
           ),
         ],

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 
 import 'dart:convert';
 
@@ -43,22 +43,26 @@ class _ChartState extends State<Chart> {
                   createdAt: data['created_at']));
             }
 
-            return SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              title: ChartTitle(text: 'Sugar Tracker'),
-              legend: Legend(isVisible: true),
-              tooltipBehavior: TooltipBehavior(enable: true),
-              series: <ChartSeries>[
-                LineSeries<SugarData, String>(
-                  dataSource: sugarLevels,
-                  xValueMapper: (SugarData sugarData, _) => sugarData.createdAt,
-                  yValueMapper: (SugarData sugarData, _) =>
-                      sugarData.sugarLevel,
-                  name: 'Sugar Level',
-                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                ),
-              ],
-            );
+            return SizedBox(
+                width: 400,
+                height: 600,
+                child: SfCartesianChart(
+                  primaryXAxis: CategoryAxis(),
+                  title: ChartTitle(text: 'Sugar Tracker'),
+                  legend: Legend(isVisible: true),
+                  tooltipBehavior: TooltipBehavior(enable: true),
+                  series: <ChartSeries>[
+                    LineSeries<SugarData, String>(
+                      dataSource: sugarLevels,
+                      xValueMapper: (SugarData sugarData, _) =>
+                          sugarData.createdAt,
+                      yValueMapper: (SugarData sugarData, _) =>
+                          sugarData.sugarLevel,
+                      name: 'Sugar Level',
+                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                    ),
+                  ],
+                ));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           } else {

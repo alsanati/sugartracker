@@ -52,6 +52,19 @@ class SupabaseHelpers {
     }
   }
 
+  Future<void> signInWithPassword(context, email, password) async {
+    try {
+      await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+    } on AuthException catch (error) {
+      context.showErrorSnackBar(message: error.message);
+    } catch (error) {
+      context.showErrorSnackBar(message: 'Unexpected error occurred');
+    }
+  }
+
   Future<void> logout(context) async {
     await supabase.auth.signOut();
     Navigator.pushReplacementNamed(context, "login");

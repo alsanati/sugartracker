@@ -2,18 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sugar_tracker/app/pages/account_page.dart';
-import 'package:sugar_tracker/app/pages/login_page.dart';
-import 'package:sugar_tracker/app/pages/splash_page.dart';
+import 'package:sugar_tracker/app/views/account_views/account_page.dart';
+import 'package:sugar_tracker/app/views/account_views/login_page.dart';
+import 'package:sugar_tracker/app/views/account_views/splash_page.dart';
 
 import 'app/components/bottomNav.dart';
-import 'app/pages/homepage.dart';
-import 'app/pages/signup_page.dart';
+import 'app/views/homepage.dart';
+import 'app/views/account_views/signup_page.dart';
 import 'constants.dart';
 
-Future<void> main() async {
+Future<void> mainCommon() async {
   await Supabase.initialize(
-    // TODO: Replace credentials with your own
     url: Constants.supabaseUrl,
     anonKey: Constants.supabaseAnonKey,
   );
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
-        'login': (_) => const LoginPage(),
+        '/login': (_) => const LoginPage(),
         '/account': (_) => const AccountPage(),
         "/home": (_) => const Homepage(),
         "/signup": (_) => const SignUpPage(),
