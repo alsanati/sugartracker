@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sugar_tracker/app/models/sugarData.dart';
 import 'package:supabase/supabase.dart';
-import 'package:sugar_tracker/app/pages/homepage.dart';
 import 'package:sugar_tracker/constants.dart';
 
 class SupabaseHelpers {

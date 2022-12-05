@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sugar_tracker/app/components/chart.dart';
-import 'package:sugar_tracker/app/pages/account_page.dart';
-import 'package:sugar_tracker/app/pages/homepage.dart';
+import 'package:sugar_tracker/app/views/chart_views/chart.dart';
+import 'package:sugar_tracker/app/views/account_views/account_page.dart';
+import 'package:sugar_tracker/app/views/homepage.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});

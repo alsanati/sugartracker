@@ -11,7 +11,7 @@ import 'app/views/homepage.dart';
 import 'app/views/account_views/signup_page.dart';
 import 'constants.dart';
 
-Future<void> mainCommon() async {
+Future<void> main() async {
   await Supabase.initialize(
     url: Constants.supabaseUrl,
     anonKey: Constants.supabaseAnonKey,

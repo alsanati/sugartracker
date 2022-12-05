@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -21,17 +19,29 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _emailController;
   late final StreamSubscription<AuthState> _authStateSubscription;
 
-  Future<void> _signIn(context, email, password) async {
+  Future<void> _signIn() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
-      await supabase.auth.signInWithPassword(
-        email: email,
-        password: password,
+      await supabase.auth.signInWithOtp(
+        email: _emailController.text,
+        emailRedirectTo:
+            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
       );
+      if (mounted) {
+        context.showSnackBar(message: 'Check your email for login link!');
+        _emailController.clear();
+      }
     } on AuthException catch (error) {
       context.showErrorSnackBar(message: error.message);
     } catch (error) {
       context.showErrorSnackBar(message: 'Unexpected error occurred');
     }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -42,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/home');
+        Navigator.of(context).pushReplacementNamed('/account');
       }
     });
     super.initState();
@@ -70,8 +80,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-            onPressed:
-                _isLoading ? null : _signIn(context, _emailController.text, ''),
+            onPressed: _isLoading ? null : _signIn,
             child: Text(_isLoading ? 'Loading' : 'Send Magic Link'),
           ),
         ],

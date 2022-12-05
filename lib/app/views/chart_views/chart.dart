@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:sugar_tracker/app/models/sugarData.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class Chart extends StatefulWidget {
   const Chart({Key? key}) : super(key: key);
