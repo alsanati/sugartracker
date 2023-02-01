@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -44,12 +42,20 @@ class _ChartState extends State<Chart> {
 
             return SizedBox(
                 width: 400,
-                height: 600,
+                height: 400,
                 child: SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  title: ChartTitle(text: 'Sugar Tracker'),
-                  legend: Legend(isVisible: true),
-                  tooltipBehavior: TooltipBehavior(enable: true),
+                  primaryXAxis: CategoryAxis(
+                    majorGridLines: const MajorGridLines(width: 0),
+                  ),
+                  primaryYAxis: NumericAxis(
+                      majorGridLines: const MajorGridLines(width: 0),
+                      labelFormat: '{value} mg/dL'),
+                  title: ChartTitle(
+                      text: 'Sugar Tracker',
+                      textStyle: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
                   series: <ChartSeries>[
                     LineSeries<SugarData, String>(
                       dataSource: sugarLevels,
@@ -57,15 +63,17 @@ class _ChartState extends State<Chart> {
                           sugarData.createdAt,
                       yValueMapper: (SugarData sugarData, _) =>
                           sugarData.sugarLevel,
-                      name: 'Sugar Level',
-                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                      color: Colors.black,
+                      dataLabelSettings:
+                          const DataLabelSettings(isVisible: false),
+                      width: 2,
                     ),
                   ],
                 ));
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         }));
   }
