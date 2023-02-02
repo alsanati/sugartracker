@@ -82,15 +82,12 @@ class _HomepageState extends State<Homepage> {
                                 Text(
                                   "Hi, ${snapshot.data}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                       fontSize: 24,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                Text("Mittwoch",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold)),
                               ],
                             ),
                             Container(

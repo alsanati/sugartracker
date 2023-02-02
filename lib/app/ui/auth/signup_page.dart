@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'login/login_page.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
-import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -25,11 +26,6 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Sign Up Page"),
-      ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -98,8 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const LoginPage()));
+                    context.go("/login");
                   },
                   child: const Text('Already a User? Login'))
             ],

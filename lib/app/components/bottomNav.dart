@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sugar_tracker/app/views/chart_views/chart.dart';
-import 'package:sugar_tracker/app/views/account_views/account_page.dart';
-import 'package:sugar_tracker/app/views/homepage.dart';
 
 class ScaffoldWithNavBar extends StatefulWidget {
   String location;
@@ -20,27 +17,21 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
   static const List<MyCustomBottomNavBarItem> tabs = [
     MyCustomBottomNavBarItem(
       icon: Icon(Icons.home),
-      activeIcon: Icon(Icons.home),
+      activeIcon: Icon(Icons.home_filled),
       label: 'HOME',
-      initialLocation: '/',
+      initialLocation: '/home',
     ),
     MyCustomBottomNavBarItem(
-      icon: Icon(Icons.storefront_outlined),
-      activeIcon: Icon(Icons.storefront),
-      label: 'DASH',
+      icon: Icon(Icons.explore_outlined),
+      activeIcon: Icon(Icons.explore),
+      label: 'DASHBOARD',
       initialLocation: '/dashboard',
     ),
     MyCustomBottomNavBarItem(
-      icon: Icon(Icons.account_circle_outlined),
-      activeIcon: Icon(Icons.account_circle),
-      label: 'MY',
+      icon: Icon(Icons.account_box_outlined),
+      activeIcon: Icon(Icons.account_box),
+      label: 'ACCOUNT',
       initialLocation: '/account',
-    ),
-    MyCustomBottomNavBarItem(
-      icon: Icon(Icons.login),
-      activeIcon: Icon(Icons.login),
-      label: 'LOGIN',
-      initialLocation: '/report',
     ),
   ];
 
@@ -60,7 +51,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
         onTap: (int index) {
           _goOtherTab(context, index);
         },
-        currentIndex: widget.location == '/'
+        currentIndex: widget.location == '/home'
             ? 0
             : widget.location == '/dashboard'
                 ? 1

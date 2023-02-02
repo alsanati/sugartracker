@@ -53,6 +53,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   syncfusion_flutter_charts: ^20.3.59
   go_router: ^6.0.2
+  bloc: ^8.1.0
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:
