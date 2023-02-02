@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/constants.dart';
 
 class SplashPage extends StatefulWidget {
@@ -25,9 +26,9 @@ class _SplashPageState extends State<SplashPage> {
     _redirectCalled = true;
     final session = supabase.auth.currentSession;
     if (session != null) {
-      Navigator.of(context).pushReplacementNamed('/nav');
+      context.go("/home");
     } else {
-      Navigator.of(context).pushReplacementNamed('/login');
+      context.go("/login");
     }
   }
 
