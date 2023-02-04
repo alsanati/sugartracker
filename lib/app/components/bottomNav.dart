@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-classScaffoldWithNavBar extends StatefulWidget {
+class ScaffoldWithNavBar extends StatefulWidget {
   String location;
   ScaffoldWithNavBar({super.key, required this.child, required this.location});
 
