@@ -1,4 +1,4 @@
-package com.example.supabase_quickstart
+package com.example.sugartracker
 
 import io.flutter.embedding.android.FlutterActivity
 
