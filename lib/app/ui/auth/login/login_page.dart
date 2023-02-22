@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,46 +16,25 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final _supabaseAuth = SupabaseHelpers();
+
   var rememberValue = false;
   bool _isLoading = false;
   bool _redirecting = false;
   late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
   late final StreamSubscription<AuthState> _authStateSubscription;
-
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await supabase.auth.signInWithOtp(
-        email: _emailController.text,
-        emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
-      );
-      if (mounted) {
-        context.showSnackBar(message: 'Check your email for login link!');
-        _emailController.clear();
-      }
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error occurred');
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   void initState() {
     _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
       if (_redirecting) return;
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/account');
+        context.go("/home");
       }
     });
     super.initState();
@@ -108,6 +86,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+                  TextFormField(
+                    controller: _passwordController,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      hintText: 'Please enter your password',
+                      prefixIcon: const Icon(Icons.password),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -117,7 +106,12 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _isLoading ? null : _signIn();
+                        _isLoading
+                            ? null
+                            : _supabaseAuth.signInWithPassword(
+                                _formKey,
+                                _emailController.text,
+                                _passwordController.text);
                       }
                     },
                     style: ElevatedButton.styleFrom(

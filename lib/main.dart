@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:sugar_tracker/app/ui/auth/signup_page.dart';
 import 'package:sugar_tracker/app/ui/chart_views/chart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/app/ui/auth/account_page.dart';
 import 'package:sugar_tracker/app/ui/auth/splash_page.dart';
 import 'app/ui/auth/login/login_page.dart';
 import 'constants.dart';
 import 'app/components/bottomNav.dart';
-import 'app/ui/homepage.dart';
+import 'app/ui/dashboard/homepage.dart';
 import 'package:go_router/go_router.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -23,11 +24,7 @@ final router = GoRouter(
       navigatorKey: _shellNavigatorKey,
       pageBuilder: (context, state, child) {
         print(state.location);
-        return NoTransitionPage(
-            child: ScaffoldWithNavBar(
-          location: state.location,
-          child: child,
-        ));
+        return const NoTransitionPage(child: NavigationExample());
       },
       routes: [
         GoRoute(
@@ -64,7 +61,7 @@ final router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/login',
       pageBuilder: (context, state) {
-        return NoTransitionPage(key: UniqueKey(), child: const LoginPage());
+        return NoTransitionPage(key: UniqueKey(), child: LoginPage());
       },
     ),
     GoRoute(
@@ -100,10 +97,11 @@ final router = GoRouter(
 
 Future<void> main() async {
   await Supabase.initialize(
-    url: Constants.supabaseUrl,
-    anonKey: Constants.supabaseAnonKey,
+    url: "https://vplernwrerwdcyoymbwx.supabase.co",
+    anonKey:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZwbGVybndyZXJ3ZGN5b3ltYnd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njc5MTUyMTUsImV4cCI6MTk4MzQ5MTIxNX0.KW-RIscnzX4UKFCQ7oMVDckZIJwyOkF2fUmLH-QM6tc",
   );
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

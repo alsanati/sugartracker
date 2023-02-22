@@ -1,11 +1,9 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase/supabase.dart';
 import 'package:sugar_tracker/constants.dart';
 
-class SupabaseHelpers {
+class SupabaseHelpers with ChangeNotifier {
   Future getSugarData() async {
     final response = await supabase
         .from('diabetes_sugar')
@@ -36,30 +34,18 @@ class SupabaseHelpers {
     }
   }
 
-  Future<void> signIn(context, email) async {
+  Future signInWithPassword(
+      GlobalKey<FormState> formkey, email, password) async {
     try {
-      await supabase.auth.signInWithOtp(
-        email: email,
-        emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
-      );
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error occurred');
-    }
-  }
-
-  Future<void> signInWithPassword(context, email, password) async {
-    try {
-      await supabase.auth.signInWithPassword(
+      final AuthResponse response = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
     } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
+      formkey.currentState?.context.showErrorSnackBar(message: error.message);
     } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error occurred');
+      formkey.currentState?.context
+          .showErrorSnackBar(message: "unexpected error brah");
     }
   }
 
