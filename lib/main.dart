@@ -3,11 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:sugar_tracker/app/ui/auth/signup_page.dart';
 import 'package:sugar_tracker/app/ui/chart_views/chart.dart';
+import 'package:sugar_tracker/text_theme.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/app/ui/auth/account_page.dart';
 import 'package:sugar_tracker/app/ui/auth/splash_page.dart';
 import 'app/ui/auth/login/login_page.dart';
+import 'color_schemes.g.dart';
 import 'constants.dart';
 import 'app/components/bottomNav.dart';
 import 'app/ui/dashboard/homepage.dart';
@@ -109,21 +111,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: router,
       title: 'Suggra',
-      theme: ThemeData.dark().copyWith(
-        useMaterial3: true,
-        primaryColor: Colors.black,
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.red,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.red,
-            backgroundColor: Colors.black,
-          ),
-        ),
-      ),
+      theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: darkColorScheme,
+          textTheme: textTheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
     );
   }
 }

@@ -52,12 +52,10 @@ class _NavigationExampleState extends State<NavigationExample> {
       ),
       body: <Widget>[
         Container(
-          color: Colors.red,
           alignment: Alignment.center,
           child: const Homepage(),
         ),
         Container(
-          color: Colors.green,
           alignment: Alignment.center,
           child: const Chart(),
         ),

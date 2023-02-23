@@ -9,10 +9,11 @@ class AsyncGlucoseNotifier extends AsyncNotifier<List<SugarData>> {
         .from('diabetes_sugar')
         .select()
         .eq('personId', supabase.auth.currentUser!.id)
-        .order('created_at', ascending: false);
+        .order('created_at', ascending: true);
 
-    var sugarLevels = SugarData.getListMap(response);
-    return sugarLevels;
+    List<SugarData> sugarLevels = SugarData.getListMap(response);
+    var newList = sugarLevels.take(1).toList();
+    return newList;
   }
 
   @override
@@ -25,3 +26,6 @@ final asyncGlucoseNotifier =
     AsyncNotifierProvider<AsyncGlucoseNotifier, List<SugarData>>(() {
   return AsyncGlucoseNotifier();
 });
+
+final sevenDaysProvider = StateProvider((ref) => false);
+final fourTeenDaysProvider = StateProvider((ref) => false);

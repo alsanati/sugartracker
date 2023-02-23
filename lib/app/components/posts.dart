@@ -39,10 +39,6 @@ class Posts extends StatelessWidget {
                       Text(
                         "Info",
                         // ignore: prefer_const_constructors
-                        style: TextStyle(
-                          color: Colors.yellow,
-                          fontSize: 12,
-                        ),
                       ),
                     ],
                   ),
