@@ -65,8 +65,6 @@ class Chart extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Divider(thickness: 1),
-                  const SizedBox(height: 10),
                   Card(
                     color: colorPrimary,
                     child: SizedBox(
@@ -74,6 +72,7 @@ class Chart extends ConsumerWidget {
                       height: 300,
                       child: SfCartesianChart(
                         primaryXAxis: DateTimeAxis(
+                          interval: 1,
                           majorGridLines: const MajorGridLines(width: 0),
                         ),
                         primaryYAxis: NumericAxis(
