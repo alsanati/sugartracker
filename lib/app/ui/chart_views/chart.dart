@@ -35,10 +35,12 @@ class Chart extends ConsumerWidget {
                             ? colorPrimary
                             : colorTertiary,
                         onPressed: () {
-                          ref.refresh(asyncGlucoseNotifier);
                           ref.watch(sevenDaysProvider.notifier).state = true;
+                          ref.watch(thirtyDaysProvider.notifier).state = false;
                           ref.watch(fourTeenDaysProvider.notifier).state =
                               false;
+
+                          return ref.refresh(asyncGlucoseNotifier);
                         },
                       ),
                       const SizedBox(width: 10),
@@ -49,13 +51,23 @@ class Chart extends ConsumerWidget {
                             : colorTertiary,
                         onPressed: () {
                           ref.watch(sevenDaysProvider.notifier).state = false;
+                          ref.watch(thirtyDaysProvider.notifier).state = false;
                           ref.watch(fourTeenDaysProvider.notifier).state = true;
                         },
                       ),
                       const SizedBox(width: 10),
                       ActionChip(
                         label: const Text('30 Days'),
-                        onPressed: () {},
+                        backgroundColor: ref.watch(thirtyDaysProvider)
+                            ? colorPrimary
+                            : colorTertiary,
+                        onPressed: () {
+                          ref.watch(sevenDaysProvider.notifier).state = false;
+                          ref.watch(fourTeenDaysProvider.notifier).state =
+                              false;
+
+                          ref.watch(thirtyDaysProvider.notifier).state = true;
+                        },
                       ),
                     ],
                   ),
@@ -67,7 +79,7 @@ class Chart extends ConsumerWidget {
                       height: 300,
                       child: SfCartesianChart(
                         primaryXAxis: DateTimeAxis(
-                          interval: 1,
+                          interval: 14,
                           majorGridLines: const MajorGridLines(width: 0),
                         ),
                         primaryYAxis: NumericAxis(

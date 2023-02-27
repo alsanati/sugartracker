@@ -14,7 +14,7 @@ class Posts extends StatelessWidget {
         itemBuilder: (context, index) {
           return Container(
             width: 200,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(10),
@@ -22,7 +22,7 @@ class Posts extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     children: const [
                       Text(

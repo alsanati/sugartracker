@@ -12,7 +12,7 @@ class AsyncGlucoseNotifier extends AsyncNotifier<List<SugarData>> {
         .order('created_at', ascending: true);
 
     List<SugarData> sugarLevels = SugarData.getListMap(response);
-    var newList = sugarLevels.take(1).toList();
+    var newList = sugarLevels.take(7).toList();
     return newList;
   }
 
@@ -29,3 +29,4 @@ final asyncGlucoseNotifier =
 
 final sevenDaysProvider = StateProvider((ref) => false);
 final fourTeenDaysProvider = StateProvider((ref) => false);
+final thirtyDaysProvider = StateProvider((ref) => false);

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:sugar_tracker/constants.dart';
 
-class SupabaseHelpers with ChangeNotifier {
+class SupabaseHelpers {
   Future getSugarData() async {
     final response = await supabase
         .from('diabetes_sugar')
@@ -11,6 +11,25 @@ class SupabaseHelpers with ChangeNotifier {
         .eq('personId', supabase.auth.currentUser!.id)
         .order('created_at', ascending: false);
     return response;
+  }
+
+  Future<String> getCurrentUser() async {
+    try {
+      final userId = supabase.auth.currentUser!.id;
+      final data = await supabase
+          .from('profiles')
+          .select()
+          .eq('id', userId)
+          .single() as Map;
+      String username = (data['username'] ?? '') as String;
+      return username;
+    } on PostgrestException catch (error) {
+      debugPrint(error.message);
+      rethrow;
+    } catch (error) {
+      debugPrint('Unexpected exception occurred');
+      rethrow;
+    }
   }
 
   Future<void> signUpUser(context, email, password) async {
@@ -42,7 +61,7 @@ class SupabaseHelpers with ChangeNotifier {
         password: password,
       );
     } on AuthException catch (error) {
-      formkey.currentState?.context.showErrorSnackBar(message: error.message);
+      formkey.currentState?.context.showErrorSnackBar(message: "fuck you");
     } catch (error) {
       formkey.currentState?.context
           .showErrorSnackBar(message: "unexpected error brah");

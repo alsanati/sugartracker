@@ -25,7 +25,7 @@ final router = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       pageBuilder: (context, state, child) {
-        print(state.location);
+        debugPrint(state.location);
         return const NoTransitionPage(child: NavigationExample());
       },
       routes: [
@@ -63,7 +63,7 @@ final router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/login',
       pageBuilder: (context, state) {
-        return NoTransitionPage(key: UniqueKey(), child: LoginPage());
+        return NoTransitionPage(key: UniqueKey(), child: const LoginPage());
       },
     ),
     GoRoute(

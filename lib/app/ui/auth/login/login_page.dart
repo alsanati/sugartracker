@@ -86,8 +86,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   TextFormField(
                     controller: _passwordController,
+                    obscureText: true,
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Please enter your password',
