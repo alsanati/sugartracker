@@ -14,10 +14,10 @@ final userProvider = FutureProvider((ref) async {
     String username = (data['username'] ?? '') as String;
     return username;
   } on PostgrestException catch (error) {
-    print(error.message);
-    throw error;
+    debugPrint(error.message);
+    rethrow;
   } catch (error) {
-    print('Unexpected exception occurred');
-    throw error;
+    debugPrint('Unexpected exception occurred');
+    rethrow;
   }
 });

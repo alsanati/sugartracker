@@ -1,11 +1,6 @@
-// ignore_for_file: unused_result
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/app/models/sugarData.dart';
-import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 import 'package:sugar_tracker/app/ui/chart_views/state/chart_state.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
