@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final _supabaseAuth = SupabaseHelpers();
 
   var rememberValue = false;
-  bool _isLoading = false;
+  final bool _isLoading = false;
   bool _redirecting = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;

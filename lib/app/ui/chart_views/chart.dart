@@ -79,7 +79,7 @@ class Chart extends ConsumerWidget {
                       height: 300,
                       child: SfCartesianChart(
                         primaryXAxis: DateTimeAxis(
-                          interval: 14,
+                          interval: 7,
                           majorGridLines: const MajorGridLines(width: 0),
                         ),
                         primaryYAxis: NumericAxis(
@@ -96,7 +96,14 @@ class Chart extends ConsumerWidget {
                             color: colorSecondary,
                             dataLabelSettings:
                                 const DataLabelSettings(isVisible: false),
-                            width: 2,
+                            width: 0,
+                            trendlines: <Trendline>[
+                              Trendline(
+                                type: TrendlineType.linear,
+                                color: Colors.red,
+                                width: 2,
+                              ),
+                            ],
                           ),
                         ],
                       ),

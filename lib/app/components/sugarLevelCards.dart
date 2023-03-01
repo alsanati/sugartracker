@@ -1,52 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:sugar_tracker/app/models/sugarData.dart';
-
-final sugarDataProvider = FutureProvider<List<SugarData>>((ref) async {
-  // Here you would fetch the sugar data from your data source
-  // and return a List<SugarData>.
-  return [];
-});
+import '../ui/dashboard/state/homepage_state.dart';
 
 class SugarDataListView extends ConsumerWidget {
   const SugarDataListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sugarDataList = ref.watch(sugarDataProvider);
-
-    return sugarDataList.when(
-      loading: () => const CircularProgressIndicator(),
-      error: (error, stackTrace) => Text('Error: $error'),
-      data: (data) => ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final sugarData = data[index];
-          final date = DateTime.parse(sugarData.createdAt!);
-          final formattedDate = DateFormat('dd/MM/yyyy').format(date);
-
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Sugar level: ${sugarData.sugarLevel} mg/dL',
-                    style: Theme.of(context).textTheme.titleSmall,
+    final colorSecondary = Theme.of(context).colorScheme.surface;
+    return ref.watch(sugarDataProvider).when(
+          loading: () => const CircularProgressIndicator(),
+          error: (error, stackTrace) => Text('Error: $error'),
+          data: (data) => ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final sugarData = data[index];
+              final date = sugarData.createdAt!;
+              final formattedDate = DateFormat().add_yMEd().format(date);
+              final sugarLevel = sugarData.sugarLevel;
+              final icon = sugarLevel! < 70
+                  ? Icons.sentiment_very_satisfied
+                  : sugarLevel >= 70 && sugarLevel < 180
+                      ? Icons.sentiment_neutral
+                      : Icons.sentiment_very_dissatisfied;
+              return Card(
+                color: sugarLevel < 70
+                    ? const Color.fromRGBO(0, 184, 169, 1)
+                    : sugarLevel >= 70 && sugarLevel < 180
+                        ? const Color.fromRGBO(255, 222, 125, 1)
+                        : const Color.fromRGBO(246, 65, 108, 1),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        formattedDate,
+                        style: TextStyle(
+                            color: colorSecondary, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(' $sugarLevel mg/dL ',
+                          style: TextStyle(color: colorSecondary)),
+                      const Spacer(),
+                      Icon(icon)
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Date: $formattedDate',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
+                ),
+              );
+            },
+          ),
+        );
   }
 }
