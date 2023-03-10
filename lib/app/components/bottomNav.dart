@@ -1,55 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_tracker/app/views/chart_views/chart.dart';
-import 'package:sugar_tracker/app/views/account_views/account_page.dart';
-import 'package:sugar_tracker/app/views/homepage.dart';
+import 'package:sugar_tracker/app/features/ui/auth/account_page.dart';
+import 'package:sugar_tracker/app/features/ui/chart_views/chart.dart';
+import 'package:sugar_tracker/app/features/ui/dashboard/homepage.dart';
 
-class BottomNav extends StatefulWidget {
-  const BottomNav({super.key});
+void main() => runApp(const ExampleApp());
+
+class ExampleApp extends StatelessWidget {
+  const ExampleApp({super.key});
 
   @override
-  State<BottomNav> createState() => _BottomNavState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(home: NavigationExample());
+  }
 }
 
-class _BottomNavState extends State<BottomNav> {
-  int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    Homepage(),
-    AccountPage(),
-    Chart(),
-  ];
+class NavigationExample extends StatefulWidget {
+  const NavigationExample({super.key});
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  @override
+  State<NavigationExample> createState() => _NavigationExampleState();
+}
+
+class _NavigationExampleState extends State<NavigationExample> {
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            currentPageIndex = index;
+          });
+        },
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_sharp),
-            label: 'Account',
-          ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.dashboard),
             label: 'Dashboard',
           ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.account_box_rounded),
+            icon: Icon(Icons.account_box_rounded),
+            label: 'Account',
+          ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red[800],
-        onTap: _onItemTapped,
       ),
+      body: <Widget>[
+        Container(
+          alignment: Alignment.center,
+          child: const Homepage(),
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: const Chart(),
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: const AccountPage(),
+        ),
+      ][currentPageIndex],
     );
   }
 }

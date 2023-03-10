@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sugar_tracker/app/components/avatar.dart';
 import 'package:sugar_tracker/constants.dart';
@@ -81,7 +82,7 @@ class _AccountPageState extends State<AccountPage> {
       context.showErrorSnackBar(message: 'Unexpected error occurred');
     }
     if (mounted) {
-      Navigator.of(context).pushReplacementNamed('/');
+      context.go('/login');
     }
   }
 
