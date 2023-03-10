@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/app/components/getSugarData.dart';
 import 'package:sugar_tracker/app/components/sugarLevelCards.dart';
+import 'package:sugar_tracker/app/ui/auth/account_page.dart';
 
+import '../../../main.dart';
 import 'state/homepage_state.dart';
 
 class Homepage extends ConsumerWidget {
@@ -10,6 +12,9 @@ class Homepage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final RenderBox box = context.findRenderObject() as RenderBox;
+    final Offset position = box.localToGlobal(Offset.zero);
+
     return ref.watch(userProvider).when(
           loading: () => const CircularProgressIndicator(),
           error: (err, stack) {
@@ -40,6 +45,17 @@ class Homepage extends ConsumerWidget {
                               Text(
                                 "Your history",
                                 style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    CustomRoute(
+                                      builder: (context) => AccountPage(),
+                                    ),
+                                  );
+                                },
+                                child: Text('Go to Second Route'),
                               )
                             ],
                           ),
@@ -56,26 +72,13 @@ class Homepage extends ConsumerWidget {
               floatingActionButton: Align(
                 alignment: Alignment.bottomRight,
                 child: FloatingActionButton(
-                  onPressed: () async {
-                    await showModalBottomSheet<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          height: 200,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: const <Widget>[
-                                PostSugarLevels(),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      CustomRoute(
+                        builder: (context) => AccountPage(),
+                      ),
                     );
-                    // Refresh the data after closing the bottom sheet
-                    return ref.refresh(sugarDataProvider);
                   },
                   child: const Icon(Icons.add),
                 ),

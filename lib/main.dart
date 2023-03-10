@@ -18,6 +18,28 @@ import 'package:go_router/go_router.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+class CustomRoute<T> extends MaterialPageRoute<T> {
+  CustomRoute({required WidgetBuilder builder})
+      : super(
+          builder: builder,
+        );
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    var begin = Offset(1.0, 0.0);
+    var end = Offset.zero;
+    var curve = Curves.ease;
+
+    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+    return SlideTransition(
+      position: animation.drive(tween),
+      child: child,
+    );
+  }
+}
+
 final router = GoRouter(
   initialLocation: '/',
   navigatorKey: _rootNavigatorKey,

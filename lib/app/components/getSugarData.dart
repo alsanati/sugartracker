@@ -81,6 +81,54 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
                   )),
             ),
           ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: TextFormField(
+              style: Theme.of(context).textTheme.bodySmall,
+              controller: _sugarLevelController,
+              textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a sugar level';
+                }
+                return null;
+              },
+              maxLines: 1,
+              maxLength: 3,
+              decoration: InputDecoration(
+                  hintText: 'Enter your sugar level',
+                  prefixIcon: const Icon(Icons.add),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  )),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: TextFormField(
+              style: Theme.of(context).textTheme.bodySmall,
+              controller: _sugarLevelController,
+              textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter a sugar level';
+                }
+                return null;
+              },
+              maxLines: 1,
+              maxLength: 3,
+              decoration: InputDecoration(
+                  hintText: 'Enter your sugar level',
+                  prefixIcon: const Icon(Icons.add),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  )),
+            ),
+          ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
                 splashFactory: InkSparkle.splashFactory),

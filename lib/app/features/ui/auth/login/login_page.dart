@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Please enter your password',
+                      hintText: 'Psdadslease enter your password',
                       prefixIcon: const Icon(Icons.password),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

@@ -9,6 +9,7 @@ class SugarDataListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorSecondary = Theme.of(context).colorScheme.surface;
+
     return ref.watch(sugarDataProvider).when(
           loading: () => const CircularProgressIndicator(),
           error: (error, stackTrace) => Text('Error: $error'),
@@ -20,10 +21,10 @@ class SugarDataListView extends ConsumerWidget {
               final formattedDate = DateFormat().add_yMEd().format(date);
               final sugarLevel = sugarData.sugarLevel;
               final icon = sugarLevel! < 70
-                  ? Icons.sentiment_very_satisfied
+                  ? '😃'
                   : sugarLevel >= 70 && sugarLevel < 180
-                      ? Icons.sentiment_neutral
-                      : Icons.sentiment_very_dissatisfied;
+                      ? '😊'
+                      : '😞';
               return Card(
                 color: sugarLevel < 70
                     ? const Color.fromRGBO(0, 184, 169, 1)
@@ -43,7 +44,7 @@ class SugarDataListView extends ConsumerWidget {
                       Text(' $sugarLevel mg/dL ',
                           style: TextStyle(color: colorSecondary)),
                       const Spacer(),
-                      Icon(icon)
+                      Text(icon)
                     ],
                   ),
                 ),

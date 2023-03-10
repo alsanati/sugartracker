@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:sugar_tracker/app/models/sugarData.dart';
 import 'package:sugar_tracker/app/ui/chart_views/state/chart_state.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -79,10 +80,17 @@ class Chart extends ConsumerWidget {
                       height: 300,
                       child: SfCartesianChart(
                         primaryXAxis: DateTimeAxis(
-                          interval: 7,
+                          interval: 1,
+                          intervalType: DateTimeIntervalType.days,
+                          dateFormat: DateFormat('dd/MM'),
                           majorGridLines: const MajorGridLines(width: 0),
+                          majorTickLines: const MajorTickLines(size: 0),
+                          maximumLabels: 7,
                         ),
                         primaryYAxis: NumericAxis(
+                            minimum: 0,
+                            maximum: 300,
+                            interval: 50,
                             majorGridLines: const MajorGridLines(width: 0),
                             labelFormat: '{value} mg/dL'),
                         title: ChartTitle(textStyle: text),
@@ -96,7 +104,7 @@ class Chart extends ConsumerWidget {
                             color: colorSecondary,
                             dataLabelSettings:
                                 const DataLabelSettings(isVisible: false),
-                            width: 0,
+                            width: 2,
                             trendlines: <Trendline>[
                               Trendline(
                                 type: TrendlineType.linear,

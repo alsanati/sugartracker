@@ -54,25 +54,56 @@ class SugarData {
     return sugarLevels;
   }
 
-  static dynamic convertTimeStampToDay(List<SugarData> items) {
-    if (items == null) {
-      return null;
+  static List<SugarData> getLast7DaysEntries(List<SugarData> sugarDataList) {
+    List<SugarData> last7DaysEntries = [];
+
+    // Sort the list of SugarData objects in descending order based on their createdAt property
+    sugarDataList.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
+    // Get the current date
+    DateTime currentDate = DateTime.now();
+
+    // Loop through the sorted list and add the entries for the last 7 days to the new list
+    for (var i = 0; i < sugarDataList.length; i++) {
+      SugarData sugarData = sugarDataList[i];
+      Duration difference = currentDate.difference(sugarData.createdAt!);
+      if (difference.inDays <= 6) {
+        last7DaysEntries.add(sugarData);
+      }
     }
 
-    List<SugarData> sugarLevels = [];
-    for (var i = 0; i < items.length; i++) {
-      var timestampString = items[i].createdAt!;
-      var correctFormat = DateFormat('dd/MM');
-      var correctDate = correctFormat.format(timestampString);
+    return last7DaysEntries;
+  }
 
-      var sugarData = SugarData(
-          id: items[i].id,
-          personId: items[i].personId,
-          sugarLevel: items[i].sugarLevel,
-          createdAt: timestampString);
+  static List<SugarData> groupByDay(List<SugarData> items) {
+    final Map<String, List<SugarData>> groupedItems = {};
 
-      sugarLevels.add(sugarData);
+    // Group items by day
+    for (var item in items) {
+      final date = DateFormat('dd/MM/yyyy').format(item.createdAt!);
+      if (!groupedItems.containsKey(date)) {
+        groupedItems[date] = [];
+      }
+      groupedItems[date]!.add(item);
     }
-    return sugarLevels;
+
+    // Calculate average sugar level for each day
+    final List<SugarData> result = [];
+    groupedItems.forEach((key, value) {
+      final avgSugarLevel =
+          value.map((e) => e.sugarLevel!).reduce((a, b) => a + b) /
+              value.length;
+      final item = SugarData(
+        id: value.first.id,
+        personId: value.first.personId,
+        sugarLevel: avgSugarLevel.round(),
+        createdAt: value.first.createdAt,
+      );
+      result.add(item);
+    });
+
+    // Sort by date and return the last 7 days
+    result.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+    return result.take(7).toList();
   }
 }
