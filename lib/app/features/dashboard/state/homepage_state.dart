@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/constants.dart';
 
-import '../../../models/sugarData.dart';
+import '../../../models/sugar_data.dart';
 import '../../../modules/supabase_modules.dart';
 
 final supabaseHelper = SupabaseHelpers();
@@ -22,4 +22,17 @@ final sugarDataProvider = FutureProvider<List<SugarData>>((ref) async {
 
   List<SugarData> sugarLevels = SugarData.getListMap(response);
   return sugarLevels;
+});
+
+final getCurrentSugarDataStats = FutureProvider<List<SugarData>>((ref) async {
+  final response = await supabase
+      .from('diabetes_sugar')
+      .select()
+      .eq('personId', supabase.auth.currentUser!.id)
+      .order('created_at', ascending: true);
+
+  List<SugarData> sugarLevels = SugarData.getListMap(response);
+  List<SugarData> currentEntries =
+      SugarData.getEntriesForCurrentDay(sugarLevels);
+  return currentEntries;
 });

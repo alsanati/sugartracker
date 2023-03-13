@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_tracker/app/features/ui/auth/account_page.dart';
-import 'package:sugar_tracker/app/features/ui/chart_views/chart.dart';
-import 'package:sugar_tracker/app/features/ui/dashboard/homepage.dart';
+import 'package:sugar_tracker/app/features/auth/account_page.dart';
+import 'package:sugar_tracker/app/features/auth/signup/stepper_form_page.dart';
+import 'package:sugar_tracker/app/features/chart_views/chart.dart';
+import 'package:sugar_tracker/app/features/dashboard/homepage.dart';
 
 void main() => runApp(const ExampleApp());
 

@@ -75,6 +75,21 @@ class SugarData {
     return last7DaysEntries;
   }
 
+  static List<SugarData> getEntriesForCurrentDay(
+      List<SugarData> sugarDataList) {
+    // Get the current date
+    DateTime currentDate = DateTime.now();
+
+    // Get the entries for the current day
+    List<SugarData> entriesForCurrentDay = sugarDataList.where((entry) {
+      return entry.createdAt!.day == currentDate.day &&
+          entry.createdAt!.month == currentDate.month &&
+          entry.createdAt!.year == currentDate.year;
+    }).toList();
+
+    return entriesForCurrentDay;
+  }
+
   static List<SugarData> groupByDay(List<SugarData> items) {
     final Map<String, List<SugarData>> groupedItems = {};
 
