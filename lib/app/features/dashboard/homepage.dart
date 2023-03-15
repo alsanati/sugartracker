@@ -13,6 +13,7 @@ class Homepage extends ConsumerWidget {
     final user = ref.watch(userProvider);
     final currentSugarData = ref.watch(getCurrentSugarDataStats);
     final sugarData = ref.watch(sugarDataProvider);
+    debugPrint(user.toString());
 
     return user.when(
       loading: () => const Center(child: CircularProgressIndicator()),

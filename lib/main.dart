@@ -125,20 +125,21 @@ final router = GoRouter(
       path: '/signup',
       pageBuilder: (context, state) {
         return CustomTransitionPage<void>(
-            key: UniqueKey(),
-            child: const SignUpPage(),
-            transitionDuration: const Duration(milliseconds: 150),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child) {
-              // Change the opacity of the screen using a Curve based on the the animation's
-              // value
-              return FadeTransition(
-                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-                child: child,
-              );
-            });
+          key: UniqueKey(),
+          child: const SignUpPage(),
+          transitionDuration: const Duration(milliseconds: 3000),
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
       },
     ),
     GoRoute(
