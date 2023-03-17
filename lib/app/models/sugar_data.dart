@@ -90,6 +90,17 @@ class SugarData {
     return entriesForCurrentDay;
   }
 
+  static List<SugarData> getEntriesForGivenDay(
+      List<SugarData> sugarDataList, DateTime date) {
+    List<SugarData> entriesForGivenDay = sugarDataList.where((entry) {
+      return entry.createdAt!.day == date.day &&
+          entry.createdAt!.month == date.month &&
+          entry.createdAt!.year == date.year;
+    }).toList();
+
+    return entriesForGivenDay;
+  }
+
   static List<SugarData> groupByDay(List<SugarData> items) {
     final Map<String, List<SugarData>> groupedItems = {};
 

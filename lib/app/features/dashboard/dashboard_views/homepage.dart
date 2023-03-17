@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/current_sugar_stats.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/sugar_level_cards.dart';
-import 'state/homepage_state.dart';
+import '../state/homepage_state.dart';
 
 class Homepage extends ConsumerWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -11,7 +11,6 @@ class Homepage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
-    final currentSugarData = ref.watch(getCurrentSugarDataStats);
     final sugarData = ref.watch(sugarDataProvider);
     debugPrint(user.toString());
 
@@ -44,8 +43,9 @@ class Homepage extends ConsumerWidget {
                         const SizedBox(
                           height: 30,
                         ),
-                        Center(
-                            child: GlucoseStats(sugardata: currentSugarData)),
+                        Center(child: GlucoseStats(sugardata: sugarData)),
+                        const SizedBox(height: 20),
+                        const Text("Your history")
                       ],
                     ),
                     Expanded(

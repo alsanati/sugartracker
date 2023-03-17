@@ -225,7 +225,7 @@ class _DiabetesTypeSelectionState extends State<DiabetesTypeSelection> {
       ),
       DropdownButtonFormField<String>(
         decoration: InputDecoration(
-            prefixIcon: Icon(FontAwesomeIcons.ticket),
+            prefixIcon: const Icon(FontAwesomeIcons.ticket),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(6.0))),
         dropdownColor: Theme.of(context).colorScheme.primaryContainer,
@@ -300,7 +300,7 @@ class PulsatingRoundButton extends StatefulWidget {
   const PulsatingRoundButton({super.key});
 
   @override
-  _PulsatingRoundButtonState createState() => _PulsatingRoundButtonState();
+  State<PulsatingRoundButton> createState() => _PulsatingRoundButtonState();
 }
 
 class _PulsatingRoundButtonState extends State<PulsatingRoundButton>

@@ -12,7 +12,7 @@ import 'app/features/auth/login/login_page.dart';
 import 'app/features/auth/signup/signup_page.dart';
 import 'app/features/auth/signup/stepper_form_page.dart';
 import 'app/features/auth/splash_page.dart';
-import 'app/features/dashboard/homepage.dart';
+import 'app/features/dashboard/dashboard_views/homepage.dart';
 import 'color_schemes.g.dart';
 import 'constants.dart';
 import 'app/features/components/bottom_nav.dart';
@@ -127,7 +127,7 @@ final router = GoRouter(
         return CustomTransitionPage<void>(
           key: UniqueKey(),
           child: const SignUpPage(),
-          transitionDuration: const Duration(milliseconds: 3000),
+          transitionDuration: const Duration(milliseconds: 150),
           transitionsBuilder: (
             BuildContext context,
             Animation<double> animation,

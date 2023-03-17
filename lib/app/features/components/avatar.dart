@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,7 +14,7 @@ class Avatar extends StatefulWidget {
   final void Function(String) onUpload;
 
   @override
-  _AvatarState createState() => _AvatarState();
+  State<Avatar> createState() => _AvatarState();
 }
 
 class _AvatarState extends State<Avatar> {

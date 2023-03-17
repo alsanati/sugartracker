@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:sugar_tracker/app/features/auth/signup/stepper_form_page.dart';
 import 'package:sugar_tracker/app/utils.dart';
-// ignore: depend_on_referenced_packages
-import 'package:supabase/supabase.dart';
 import 'package:sugar_tracker/constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseHelpers {
   Future getSugarData() async {
@@ -35,9 +32,8 @@ class SupabaseHelpers {
     }
   }
 
-  Future<void> signUpUser(context, email, password) async {
+  Future<void> signUpUser(BuildContext context, email, password) async {
     debugPrint("email: $email password: $password");
-
     try {
       final response = await supabase.auth.signUp(
         email: email!,
@@ -45,19 +41,17 @@ class SupabaseHelpers {
       );
 
       if (response.user != null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Registration successful"),
-          backgroundColor: Colors.green,
-        ));
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Registration successful"),
+            backgroundColor: Colors.green,
+          ));
+          context.go(NavigationHelper.stepperPage);
+        }
       }
-
-      navigateToNewPage(context, "/stepper");
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.message),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text(error.message), backgroundColor: Colors.red),
       );
     } catch (error) {
       debugPrint(error.toString());
