@@ -1,50 +1,28 @@
-import 'dart:async';
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sugar_tracker/constants.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
+  final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
   final _supabaseAuth = SupabaseHelpers();
-
-  var rememberValue = false;
   final bool _isLoading = false;
-  bool _redirecting = false;
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-  late final StreamSubscription<AuthState> _authStateSubscription;
-
-  @override
-  void initState() {
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      if (_redirecting) return;
-      final session = data.session;
-      if (session != null) {
-        _redirecting = true;
-        context.go("/home");
-      }
-    });
-    super.initState();
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _authStateSubscription.cancel();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -59,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Sign in',
+              'Sign up',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
@@ -95,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Psdadslease enter your password',
+                      hintText: 'Please enter a password',
                       prefixIcon: const Icon(Icons.password),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -113,8 +91,8 @@ class _LoginPageState extends State<LoginPage> {
                       if (_formKey.currentState!.validate()) {
                         _isLoading
                             ? null
-                            : _supabaseAuth.signInWithPassword(
-                                _formKey,
+                            : _supabaseAuth.signUpUser(
+                                context,
                                 _emailController.text,
                                 _passwordController.text);
                       }
@@ -123,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                     ),
                     child: const Text(
-                      'Sign in',
+                      'Sign up',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -135,12 +113,12 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Not registered yet?'),
+                      const Text('Already have an account?'),
                       TextButton(
                         onPressed: () {
-                          context.go("/signup");
+                          context.go("/login");
                         },
-                        child: const Text('Create an account'),
+                        child: const Text('Sign in'),
                       ),
                     ],
                   ),

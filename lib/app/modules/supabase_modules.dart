@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
-import 'package:supabase/supabase.dart';
+import 'package:sugar_tracker/app/utils.dart';
 import 'package:sugar_tracker/constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseHelpers {
   Future getSugarData() async {
@@ -32,9 +32,8 @@ class SupabaseHelpers {
     }
   }
 
-  Future<void> signUpUser(context, email, password) async {
+  Future<void> signUpUser(BuildContext context, email, password) async {
     debugPrint("email: $email password: $password");
-
     try {
       final response = await supabase.auth.signUp(
         email: email!,
@@ -42,26 +41,38 @@ class SupabaseHelpers {
       );
 
       if (response.user != null) {
-        context.showErrorSnackBar(
-            message: "Registration successful!", isError: false);
-        Navigator.pushReplacementNamed(context, "login");
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Registration successful"),
+            backgroundColor: Colors.green,
+          ));
+          context.go(NavigationHelper.stepperPage);
+        }
       }
     } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error.message), backgroundColor: Colors.red),
+      );
     } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error occurred');
+      debugPrint(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("unexpected error occured"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   Future signInWithPassword(
       GlobalKey<FormState> formkey, email, password) async {
     try {
-      final AuthResponse response = await supabase.auth.signInWithPassword(
+      await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
     } on AuthException catch (error) {
-      formkey.currentState?.context.showErrorSnackBar(message: "fuck you");
+      formkey.currentState?.context.showErrorSnackBar(message: error.message);
     } catch (error) {
       formkey.currentState?.context
           .showErrorSnackBar(message: "unexpected error brah");

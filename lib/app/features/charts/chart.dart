@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:sugar_tracker/app/models/sugarData.dart';
-import 'package:sugar_tracker/app/ui/chart_views/state/chart_state.dart';
+import 'package:sugar_tracker/app/features/charts/state/chart_state.dart';
+import 'package:sugar_tracker/app/models/sugar_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Chart extends ConsumerWidget {
@@ -23,6 +23,14 @@ class Chart extends ConsumerWidget {
             );
           },
           data: (data) {
+            if (data.length < 7) {
+              return const Center(
+                child: Text(
+                  'not enough data',
+                  style: TextStyle(fontSize: 24),
+                ),
+              );
+            }
             return Center(
               child: Column(
                 children: [
@@ -105,13 +113,6 @@ class Chart extends ConsumerWidget {
                             dataLabelSettings:
                                 const DataLabelSettings(isVisible: false),
                             width: 2,
-                            trendlines: <Trendline>[
-                              Trendline(
-                                type: TrendlineType.linear,
-                                color: Colors.red,
-                                width: 2,
-                              ),
-                            ],
                           ),
                         ],
                       ),
