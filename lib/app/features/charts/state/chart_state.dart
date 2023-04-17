@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sugar_tracker/constants.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 import '../../../models/sugar_data.dart';
 
 class AsyncGlucoseNotifier extends AsyncNotifier<List<SugarData>> {

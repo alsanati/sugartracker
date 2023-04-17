@@ -13,8 +13,8 @@ import 'app/features/auth/signup/signup_page.dart';
 import 'app/features/auth/signup/stepper_form_page.dart';
 import 'app/features/auth/splash_page.dart';
 import 'app/features/dashboard/dashboard_views/homepage.dart';
-import 'color_schemes.g.dart';
-import 'constants.dart';
+import 'app/utils/color_schemes.g.dart';
+import 'app/utils/constants.dart';
 import 'app/features/components/bottom_nav.dart';
 import 'package:go_router/go_router.dart';
 

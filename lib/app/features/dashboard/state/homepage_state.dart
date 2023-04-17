@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sugar_tracker/constants.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 
 import '../../../models/sugar_data.dart';
 import '../../../modules/supabase_modules.dart';
@@ -7,7 +7,7 @@ import '../../../modules/supabase_modules.dart';
 final supabaseHelper = SupabaseHelpers();
 
 final userProvider = FutureProvider((ref) async {
-  var currentUser = supabaseHelper.getCurrentUser();
+  var currentUser = await supabaseHelper.getCurrentUser();
   return currentUser;
 });
 
