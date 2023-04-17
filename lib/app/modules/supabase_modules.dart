@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_tracker/app/utils.dart';
-import 'package:sugar_tracker/constants.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseHelpers {

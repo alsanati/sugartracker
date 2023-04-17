@@ -44,6 +44,12 @@ dependencies:
   google_fonts: ^4.0.3
   intl: ^0.18.0
   font_awesome_flutter: ^10.4.0
+  flutter_local_notifications: ^8.2.0
+  timezone: ^0.8.0
+  flutter_native_timezone: ^2.0.0
+  rxdart: ^0.27.7
+  path_provider: ^2.0.14
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

@@ -12,7 +12,6 @@ class Homepage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider);
     final sugarData = ref.watch(sugarDataProvider);
-    debugPrint(user.toString());
 
     return user.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -21,11 +20,12 @@ class Homepage extends ConsumerWidget {
           body: Center(child: Text('$err')),
         );
       },
-      data: (userProvider) {
+      data: (user) {
         return RefreshIndicator(
           onRefresh: () async {
             ref.invalidate(sugarDataProvider);
             ref.invalidate(getCurrentSugarDataStats);
+            ref.invalidate(userProvider);
           },
           child: Scaffold(
             body: SafeArea(
@@ -37,7 +37,7 @@ class Homepage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Hi, $userProvider",
+                          "Hi, $user",
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(
