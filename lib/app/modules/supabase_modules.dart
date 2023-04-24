@@ -83,4 +83,56 @@ class SupabaseHelpers {
     await supabase.auth.signOut();
     Navigator.pushReplacementNamed(context, "login");
   }
+
+  Future<void> insertPatientData(
+      String firstName,
+      String lastName,
+      String address,
+      String birthday,
+      String city,
+      String street,
+      String postalCode,
+      String phone,
+      String email) async {
+    // Insert data into the patient table
+    final patientResponse = await supabase.from('patient').insert([
+      {'first_name': firstName, 'last_name': lastName, "birthday": birthday}
+    ]);
+
+    if (patientResponse.error != null) {
+      throw patientResponse.error!;
+    }
+
+    final patientData = patientResponse.data;
+
+    // Insert data into the patient_address table
+    final addressResponse = await supabase.from('patient_address').insert([
+      {
+        'patient_id': patientData[0]['id'],
+        'use': "home",
+        'line': street,
+        'city': city,
+        'postal_code': postalCode,
+        'acccount_id': supabase.auth.currentUser
+      }
+    ]);
+
+    if (addressResponse.error != null) {
+      throw addressResponse.error!;
+    }
+
+    // Insert data into the telecom table
+    final telecomResponse = await supabase.from('telecom').insert([
+      {
+        'patient_id': patientData[0]['id'],
+        'system': "email",
+        'value': email,
+        'use': "home"
+      }
+    ]);
+
+    if (telecomResponse.error != null) {
+      throw telecomResponse.error!;
+    }
+  }
 }
