@@ -1,69 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:sugar_tracker/app/features/auth/account_page.dart';
-import 'package:sugar_tracker/app/features/charts/chart.dart';
-import 'package:sugar_tracker/app/features/dashboard/dashboard_views/homepage.dart';
+import 'package:go_router/go_router.dart';
 
-void main() => runApp(const ExampleApp());
-
-class ExampleApp extends StatelessWidget {
-  const ExampleApp({super.key});
+class CustomBottomNavigationBar extends StatefulWidget {
+  const CustomBottomNavigationBar({super.key, required this.child});
+  final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(home: NavigationExample());
-  }
+  State<CustomBottomNavigationBar> createState() =>
+      _CustomBottomNavigationbarState();
 }
 
-class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
-
-  @override
-  State<NavigationExample> createState() => _NavigationExampleState();
-}
-
-class _NavigationExampleState extends State<NavigationExample> {
-  int currentPageIndex = 0;
-
+class _CustomBottomNavigationbarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.account_box_rounded),
-            icon: Icon(Icons.account_box_rounded),
-            label: 'Account',
-          ),
+      body: widget.child,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _calculateSelectedIndex(context),
+        onTap: onTap,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: 'Charts'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_box), label: 'Account'),
         ],
       ),
-      body: <Widget>[
-        Container(
-          alignment: Alignment.center,
-          child: const Homepage(),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: const Chart(),
-        ),
-        Container(
-          alignment: Alignment.center,
-          child: const AccountPage(),
-        ),
-      ][currentPageIndex],
     );
+  }
+
+  int _calculateSelectedIndex(BuildContext context) {
+    final GoRouter route = GoRouter.of(context);
+    final String location = route.location;
+    if (location.startsWith('/home')) {
+      return 0;
+    }
+    if (location.startsWith('/search')) {
+      return 1;
+    }
+    if (location.startsWith('/account')) {
+      return 2;
+    }
+    return 0;
+  }
+
+  void onTap(int value) {
+    switch (value) {
+      case 0:
+        return context.go('/home');
+      case 1:
+        return context.go('/dashboard');
+      case 2:
+        return context.go('/account');
+      default:
+        return context.go('/home');
+    }
   }
 }

@@ -1,11 +1,12 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class PulsatingRoundButton extends StatefulWidget {
-  const PulsatingRoundButton({super.key});
+  const PulsatingRoundButton({super.key, required this.onPressed});
+
+  final VoidCallback onPressed;
 
   @override
   State<PulsatingRoundButton> createState() => _PulsatingRoundButtonState();
@@ -52,6 +53,7 @@ class _PulsatingRoundButtonState extends State<PulsatingRoundButton>
           _animationController!.addListener(() {
             setState(() {});
           });
+          widget.onPressed();
           context.go("/home");
         }
       },

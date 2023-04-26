@@ -50,6 +50,8 @@ dependencies:
   rxdart: ^0.27.7
   path_provider: ^2.0.14
   http: ^0.13.5
+  loading_animation_widget: ^1.2.0+4
+  rive: ^0.10.4
 
 dev_dependencies:
   flutter_test:

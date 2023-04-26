@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sugar_tracker/app/features/auth/signup/stepper_page_state.dart';
 import 'package:sugar_tracker/app/utils/utils.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -75,7 +76,7 @@ class SupabaseHelpers {
       formkey.currentState?.context.showErrorSnackBar(message: error.message);
     } catch (error) {
       formkey.currentState?.context
-          .showErrorSnackBar(message: "unexpected error brah");
+          .showErrorSnackBar(message: "unexpected error");
     }
   }
 
@@ -91,48 +92,43 @@ class SupabaseHelpers {
       String birthday,
       String city,
       String street,
-      String postalCode,
-      String phone,
+      String country,
+      int postalCode,
+      int phone,
       String email) async {
     // Insert data into the patient table
-    final patientResponse = await supabase.from('patient').insert([
-      {'first_name': firstName, 'last_name': lastName, "birthday": birthday}
-    ]);
+    final List<Map<String, dynamic>> patientResponse =
+        await supabase.from('patient').insert([
+      {
+        'first_name': firstName,
+        'last_name': lastName,
+        'birthday': birthday,
+        'account_id': supabaseHelper.getCurrentUser()
+      }
+    ]).select();
 
-    if (patientResponse.error != null) {
-      throw patientResponse.error!;
-    }
-
-    final patientData = patientResponse.data;
+    debugPrint(patientResponse[0][0]);
 
     // Insert data into the patient_address table
-    final addressResponse = await supabase.from('patient_address').insert([
+    await supabase.from('patient_address').insert([
       {
-        'patient_id': patientData[0]['id'],
+        'patient_id': patientResponse[0]['id'],
         'use': "home",
         'line': street,
         'city': city,
         'postal_code': postalCode,
-        'acccount_id': supabase.auth.currentUser
+        'country': country
       }
     ]);
 
-    if (addressResponse.error != null) {
-      throw addressResponse.error!;
-    }
-
     // Insert data into the telecom table
-    final telecomResponse = await supabase.from('telecom').insert([
+    await supabase.from('telecom').insert([
       {
-        'patient_id': patientData[0]['id'],
+        'patient_id': patientResponse[0]['id'],
         'system': "email",
         'value': email,
         'use': "home"
       }
     ]);
-
-    if (telecomResponse.error != null) {
-      throw telecomResponse.error!;
-    }
   }
 }

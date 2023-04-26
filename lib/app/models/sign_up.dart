@@ -1,4 +1,4 @@
-import 'dart:ffi';
+import 'package:flutter/cupertino.dart';
 
 class PatientData {
   final String firstName;
@@ -41,4 +41,16 @@ class PatientTelecom {
       required this.value,
       required this.use,
       required this.patientId});
+}
+
+class FormControllers {
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController birthdayController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController cityCodeController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 }

@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sugar_tracker/app/features/auth/signup/stepper_page_state.dart';
 
 import 'components/date_picker.dart';
 import 'components/diabetes_picker.dart';
 import 'components/pulsating_button.dart';
 
-class StepperPage extends StatefulWidget {
+class StepperPage extends ConsumerStatefulWidget {
   const StepperPage({super.key});
 
   @override
-  State<StepperPage> createState() => _StepperPageState();
+  _StepperPageState createState() => _StepperPageState();
 }
 
-class _StepperPageState extends State<StepperPage> {
+class _StepperPageState extends ConsumerState<StepperPage> {
   int _index = 0;
   List<String> types = ['Type 1', 'Type 2', 'Gestational Diabetes', 'Other'];
-
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _cityCodeController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _adressController = TextEditingController();
 
   Widget _buildDataStorageInfo() {
     return const Text(
@@ -34,6 +30,7 @@ class _StepperPageState extends State<StepperPage> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final secondaryColor = Theme.of(context).colorScheme.secondary;
     final tertiaryColor = Theme.of(context).colorScheme.tertiary;
+    final formControllers = ref.watch(formControllersProvider); // Access
 
     return Scaffold(
       appBar: AppBar(
@@ -65,8 +62,7 @@ class _StepperPageState extends State<StepperPage> {
         },
         controlsBuilder: (BuildContext context, ControlsDetails details) {
           if (_index == 3 - 1) {
-            return const Align(
-                alignment: Alignment.bottomLeft, child: PulsatingRoundButton());
+            return const Align(alignment: Alignment.bottomLeft);
           } else {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,7 +100,7 @@ class _StepperPageState extends State<StepperPage> {
                               iconColor: tertiaryColor,
                               hintText: "First name",
                             ),
-                            controller: _firstNameController,
+                            controller: formControllers.firstNameController,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -116,7 +112,7 @@ class _StepperPageState extends State<StepperPage> {
                               iconColor: tertiaryColor,
                               hintText: "Last name",
                             ),
-                            controller: _lastNameController,
+                            controller: formControllers.lastNameController,
                           ),
                         ),
                       ],
@@ -134,7 +130,7 @@ class _StepperPageState extends State<StepperPage> {
                                 hintText: "City code",
                               ),
                               keyboardType: TextInputType.number,
-                              controller: _cityCodeController),
+                              controller: formControllers.cityCodeController),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
@@ -146,7 +142,7 @@ class _StepperPageState extends State<StepperPage> {
                                 hintText: "City",
                                 prefixIcon: const Icon(FontAwesomeIcons.city,
                                     size: 15)),
-                            controller: _cityController,
+                            controller: formControllers.cityController,
                           ),
                         ),
                       ],
@@ -159,7 +155,7 @@ class _StepperPageState extends State<StepperPage> {
                             hintText: "Address",
                             prefixIcon:
                                 const Icon(FontAwesomeIcons.addressBook)),
-                        controller: _adressController),
+                        controller: formControllers.addressController),
                     const SizedBox(height: 10),
                     const MyDatePicker()
                   ]),
@@ -187,7 +183,6 @@ class _StepperPageState extends State<StepperPage> {
                             Theme.of(context).colorScheme.onPrimaryContainer),
                   ),
                   const MyDatePicker(),
-                  const PulsatingRoundButton()
                 ],
               )),
           Step(
@@ -202,6 +197,19 @@ class _StepperPageState extends State<StepperPage> {
                 const SizedBox(height: 10),
                 _buildDataStorageInfo(),
                 const SizedBox(height: 150),
+                PulsatingRoundButton(onPressed: () {
+                  supabaseHelper.insertPatientData(
+                      formControllers.firstNameController.text,
+                      formControllers.lastNameController.text,
+                      formControllers.addressController.text,
+                      formControllers.birthdayController.text,
+                      formControllers.cityCodeController.text,
+                      formControllers.addressController.text,
+                      formControllers.countryController.text,
+                      int.parse(formControllers.cityCodeController.text),
+                      123,
+                      "email");
+                })
               ],
             ),
           ),

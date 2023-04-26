@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:sugar_tracker/app/features/charts/state/chart_state.dart';
+import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:sugar_tracker/app/models/sugar_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -24,11 +25,8 @@ class Chart extends ConsumerWidget {
           },
           data: (data) {
             if (data.length < 7) {
-              return const Center(
-                child: Text(
-                  'not enough data',
-                  style: TextStyle(fontSize: 24),
-                ),
+              return Scaffold(
+                body: Center(child: Text('Not enough data')),
               );
             }
             return Center(
