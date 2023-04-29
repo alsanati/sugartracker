@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
 
@@ -33,4 +35,21 @@ class RiveTransition extends StatelessWidget {
       },
     );
   }
+}
+
+Future<String> loadMarkdownAsset(String string) async {
+  return await rootBundle.loadString(string);
+}
+
+Widget buildMarkdownWidget() {
+  return FutureBuilder<String>(
+    future: loadMarkdownAsset("assets/diabetes_report.md"),
+    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        return Markdown(data: snapshot.data ?? '');
+      } else {
+        return const CircularProgressIndicator();
+      }
+    },
+  );
 }

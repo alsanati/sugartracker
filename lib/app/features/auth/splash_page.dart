@@ -34,9 +34,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-          widthFactor: 2, heightFactor: 2, child: CircularProgressIndicator()),
+    return const Center(
+      child:
+          SizedBox(width: 50, height: 50, child: CircularProgressIndicator()),
     );
   }
 }

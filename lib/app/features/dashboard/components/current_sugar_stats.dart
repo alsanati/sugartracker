@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:sugar_tracker/app/models/sugar_data.dart';
 
-class GlucoseStats extends ConsumerWidget {
-  final AsyncValue<List<SugarData>> sugardata;
+class GlucoseStats extends StatelessWidget {
+  final List<SugarData> sugardata;
   const GlucoseStats({Key? key, required this.sugardata}) : super(key: key);
 
   double calculateChangeInAverage(
@@ -39,77 +39,56 @@ class GlucoseStats extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return sugardata.when(
-      loading: () {
-        return FutureBuilder(
-          future: Future.delayed(const Duration(seconds: 200)),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: Text("Hang on! Counting sugar molecules..."),
-              );
-            } else {
-              return Container(); // Empty container when the delay is over
-            }
-          },
-        );
-      },
-      error: (err, stack) {
-        return Text('$err');
-      },
-      data: (currentEntries) {
-        int? minGlucose;
-        int? maxGlucose;
-        double averageGlucose = 0;
+  Widget build(BuildContext context) {
+    int? minGlucose;
+    int? maxGlucose;
+    double averageGlucose = 0;
 
-        DateTime today = DateTime.now();
-        DateTime yesterday = today.subtract(const Duration(days: 1));
+    DateTime today = DateTime.now();
+    DateTime yesterday = today.subtract(const Duration(days: 1));
 
-        List<SugarData> todayData =
-            SugarData.getEntriesForGivenDay(currentEntries, today);
-        List<SugarData> yesterdayData =
-            SugarData.getEntriesForGivenDay(currentEntries, yesterday);
+    List<SugarData> todayData =
+        SugarData.getEntriesForGivenDay(sugardata, today);
+    List<SugarData> yesterdayData =
+        SugarData.getEntriesForGivenDay(sugardata, yesterday);
 
-        if (todayData.isNotEmpty) {
-          minGlucose = todayData
-              .map((e) => e.sugarLevel!)
-              .reduce((a, b) => a < b ? a : b);
-          maxGlucose = todayData
-              .map((e) => e.sugarLevel!)
-              .reduce((a, b) => a > b ? a : b);
-          averageGlucose =
-              todayData.map((e) => e.sugarLevel!).reduce((a, b) => a + b) /
-                  todayData.length;
-        }
+    if (todayData.isNotEmpty) {
+      minGlucose =
+          todayData.map((e) => e.sugarLevel!).reduce((a, b) => a < b ? a : b);
+      maxGlucose =
+          todayData.map((e) => e.sugarLevel!).reduce((a, b) => a > b ? a : b);
+      averageGlucose =
+          todayData.map((e) => e.sugarLevel!).reduce((a, b) => a + b) /
+              todayData.length;
 
-        String changeInAverage =
-            calculateChangeInAverage(todayData, yesterdayData).toString();
-        TextStyle changeTextStyle = TextStyle(
-          color: changeInAverage.startsWith('↑') ? Colors.red : Colors.green,
-        );
-        return Center(
-          child: Container(
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildCircleStat(context, 'Min.', minGlucose, changeInAverage,
-                    changeTextStyle),
-                buildCircleStat(
-                    context,
-                    'Avg.',
-                    averageGlucose.toStringAsFixed(0),
-                    changeInAverage,
-                    changeTextStyle),
-                buildCircleStat(context, 'Max.', maxGlucose, changeInAverage,
-                    changeTextStyle),
-              ],
-            ),
+      String changeInAverage =
+          calculateChangeInAverage(todayData, yesterdayData).toString();
+      TextStyle changeTextStyle = TextStyle(
+        color: changeInAverage.startsWith('↑') ? Colors.red : Colors.green,
+      );
+      return Center(
+        child: Container(
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildCircleStat(context, 'Min.', minGlucose, changeInAverage,
+                  changeTextStyle),
+              buildCircleStat(
+                  context,
+                  'Avg.',
+                  averageGlucose.toStringAsFixed(0),
+                  changeInAverage,
+                  changeTextStyle),
+              buildCircleStat(context, 'Max.', maxGlucose, changeInAverage,
+                  changeTextStyle),
+            ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    } else {
+      return const Text("Add your sugar data!");
+    }
   }
 
   Padding buildCircleStat(BuildContext context, String title, dynamic value,

@@ -202,7 +202,7 @@ class _StepperPageState extends ConsumerState<StepperPage> {
                       formControllers.firstNameController.text,
                       formControllers.lastNameController.text,
                       formControllers.addressController.text,
-                      formControllers.birthdayController.text,
+                      ref.read(selectedDateProvider),
                       formControllers.cityCodeController.text,
                       formControllers.addressController.text,
                       formControllers.countryController.text,

@@ -52,6 +52,8 @@ dependencies:
   http: ^0.13.5
   loading_animation_widget: ^1.2.0+4
   rive: ^0.10.4
+  flutter_markdown: ^0.6.14
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -70,3 +72,6 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true
+  assets:
+    - assets/diabetes_report.md
+

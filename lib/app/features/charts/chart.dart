@@ -17,7 +17,10 @@ class Chart extends ConsumerWidget {
     final colorTertiary = Theme.of(context).colorScheme.tertiaryContainer;
 
     return ref.watch(asyncGlucoseNotifier).when(
-          loading: () => const CircularProgressIndicator(),
+          loading: () => const Center(
+            child: SizedBox(
+                width: 50, height: 50, child: CircularProgressIndicator()),
+          ),
           error: (err, stack) {
             return Scaffold(
               body: Center(child: Text('$err')),
@@ -25,7 +28,7 @@ class Chart extends ConsumerWidget {
           },
           data: (data) {
             if (data.length < 7) {
-              return Scaffold(
+              return const Scaffold(
                 body: Center(child: Text('Not enough data')),
               );
             }
