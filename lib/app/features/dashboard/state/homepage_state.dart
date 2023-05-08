@@ -1,17 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sugar_tracker/constants.dart';
-
+import 'package:sugar_tracker/app/models/homepage.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 import '../../../models/sugar_data.dart';
+import '../../../modules/open_ai_module.dart';
 import '../../../modules/supabase_modules.dart';
+import '../../../utils/opan_ai_config.dart';
 
-final supabaseHelper = SupabaseHelpers();
+final supabaseHelper = SupabaseHelpers(supabase);
 
-final userProvider = FutureProvider((ref) async {
-  var currentUser = supabaseHelper.getCurrentUser();
-  return currentUser;
+final openAiConfig = OpenAiConfig.withApiKey();
+final openAI = OpenAiApi(apiKey: openAiConfig.apiKey ?? '');
+
+final diabetesDataProvider = FutureProvider<List<dynamic>>((ref) async {
+  return await supabaseHelper.fetchDiabetesData();
 });
 
-final sugarDataProvider = FutureProvider<List<SugarData>>((ref) async {
+final reportProvider = FutureProvider<String>((ref) async {
+  final diabetesData = await ref.watch(diabetesDataProvider.future);
+  final report = await openAI.fetchOpenAIResponse(diabetesData);
+  return report;
+});
+
+final homePageProvider = FutureProvider<HomepageState>((ref) async {
+  var currentUser = await supabaseHelper.getCurrentUser();
+  final sugarData = await getSugarStats();
+  return HomepageState(user: currentUser, sugarData: sugarData);
+});
+
+Future<List<SugarData>> getSugarStats() async {
   // Here you would fetch the sugar data from your data source
   // and return a List<SugarData>.
   final response = await supabase
@@ -22,7 +38,7 @@ final sugarDataProvider = FutureProvider<List<SugarData>>((ref) async {
 
   List<SugarData> sugarLevels = SugarData.getListMap(response);
   return sugarLevels;
-});
+}
 
 final getCurrentSugarDataStats = FutureProvider<List<SugarData>>((ref) async {
   final response = await supabase

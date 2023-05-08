@@ -4,7 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:sugar_tracker/constants.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _supabaseAuth = SupabaseHelpers();
+  final _supabaseAuth = SupabaseHelpers(supabase);
 
   var rememberValue = false;
   final bool _isLoading = false;
@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Psdadslease enter your password',
+                      hintText: 'Please enter your password',
                       prefixIcon: const Icon(Icons.password),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
