@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
-  final _supabaseAuth = SupabaseHelpers();
+  final _supabaseAuth = SupabaseHelpers(supabase);
   final bool _isLoading = false;
 
   @override

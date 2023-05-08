@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sugar_tracker/app/features/auth/signup/stepper_page_state.dart';
+import 'package:sugar_tracker/app/modules/supabase_modules.dart';
+import 'package:sugar_tracker/app/utils/constants.dart';
 
 import 'components/date_picker.dart';
 import 'components/diabetes_picker.dart';
@@ -30,7 +32,8 @@ class _StepperPageState extends ConsumerState<StepperPage> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final secondaryColor = Theme.of(context).colorScheme.secondary;
     final tertiaryColor = Theme.of(context).colorScheme.tertiary;
-    final formControllers = ref.watch(formControllersProvider); // Access
+    final formControllers = ref.watch(formControllersProvider);
+    final supabaseHelper = SupabaseHelpers(supabase);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,6 +1,6 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
 
 import '../state/homepage_state.dart';
 
@@ -9,7 +9,7 @@ class DiabetesReport extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final diabetesData = ref.watch(diabetesDataProvider);
+    final diabetesData = ref.watch(reportProvider);
 
     return diabetesData.when(
       loading: () => const Center(
@@ -20,24 +20,15 @@ class DiabetesReport extends ConsumerWidget {
       },
       data: (diabetesDataList) {
         // Convert diabetesDataList to a list of strings
-        List<String> diabetesDataStringList =
-            diabetesDataList.map((data) => data.toString()).toList();
 
         if (diabetesDataList.isEmpty) {
-          return Scaffold(
+          return const Scaffold(
             body: Center(child: Text("No response from Chatbot.")),
           );
         }
 
-        return SizedBox(
-          width: double.infinity,
-          child: TypewriterAnimatedTextKit(
-            text: diabetesDataStringList,
-            textStyle: const TextStyle(fontSize: 16.0),
-            textAlign: TextAlign.start,
-            speed: const Duration(milliseconds: 25),
-          ),
-        );
+        return const SizedBox(
+            width: double.infinity, child: MyMarkDownWidget());
       },
     );
   }

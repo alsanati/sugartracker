@@ -146,7 +146,7 @@ class _AccountPageState extends State<AccountPage> {
             decoration: InputDecoration(
               labelText: 'User Name',
               labelStyle: theme.textTheme
-                  .subtitle1, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+                  .titleMedium, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
             ),
           ),
           const SizedBox(height: 18),
@@ -155,32 +155,30 @@ class _AccountPageState extends State<AccountPage> {
             decoration: InputDecoration(
               labelText: 'Website',
               labelStyle: theme.textTheme
-                  .subtitle1, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+                  .titleMedium, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
             ),
           ),
           const SizedBox(height: 18),
           ElevatedButton(
             onPressed: _updateProfile,
-            child: Text(_loading ? 'Saving...' : 'Update'),
             style: ElevatedButton.styleFrom(
-              primary: theme.colorScheme
+              foregroundColor: theme.colorScheme.onPrimary,
+              backgroundColor: theme.colorScheme
                   .primary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-              onPrimary: theme.colorScheme
-                  .onPrimary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
               elevation:
                   4, // Apply Material 3 elevation support [docs.flutter.dev](https://docs.flutter.dev/ui/material)
             ),
+            child: Text(_loading ? 'Saving...' : 'Update'),
           ),
           const SizedBox(height: 18),
           TextButton(
             onPressed: _signOut,
-            child: const Text('Sign Out'),
             style: TextButton.styleFrom(
-              primary: theme.colorScheme
-                  .primary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-              onSurface: theme.colorScheme
-                  .onSurface, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+              foregroundColor: theme.colorScheme.primary,
+              disabledForegroundColor: theme.colorScheme.onSurface.withOpacity(
+                  0.38), // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
             ),
+            child: const Text('Sign Out'),
           ),
         ],
       ),

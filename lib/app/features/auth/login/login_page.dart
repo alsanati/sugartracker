@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _supabaseAuth = SupabaseHelpers();
+  final _supabaseAuth = SupabaseHelpers(supabase);
 
   var rememberValue = false;
   final bool _isLoading = false;

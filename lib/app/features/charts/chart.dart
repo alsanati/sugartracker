@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:sugar_tracker/app/features/charts/state/chart_state.dart';
-import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:sugar_tracker/app/models/sugar_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

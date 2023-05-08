@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
+import 'package:sugar_tracker/app/features/dashboard/state/homepage_state.dart';
 
 extension NavigationHelper on BuildContext {
   static const String homePage = '/home';
@@ -41,15 +43,21 @@ Future<String> loadMarkdownAsset(String string) async {
   return await rootBundle.loadString(string);
 }
 
-Widget buildMarkdownWidget() {
-  return FutureBuilder<String>(
-    future: loadMarkdownAsset("assets/diabetes_report.md"),
-    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-      if (snapshot.connectionState == ConnectionState.done) {
-        return Markdown(data: snapshot.data ?? '');
-      } else {
-        return const CircularProgressIndicator();
-      }
-    },
-  );
+class MyMarkDownWidget extends ConsumerWidget {
+  const MyMarkDownWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
+      final reportAsyncValue = ref.watch(reportProvider);
+
+      return reportAsyncValue.when(
+        data: (String data) => Markdown(data: data),
+        loading: () => const CircularProgressIndicator(),
+        error: (error, stack) => Center(
+          child: Text('Error: $error'),
+        ),
+      );
+    });
+  }
 }

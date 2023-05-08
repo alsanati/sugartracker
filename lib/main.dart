@@ -150,6 +150,7 @@ final router = GoRouter(
 );
 
 Future<void> main() async {
+  await dotenv.load(fileName: "assets/.env");
   await Supabase.initialize(
     url: Constants.supabaseUrl,
     anonKey: Constants.supabaseAnonKey,

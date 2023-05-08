@@ -4,8 +4,12 @@ import 'package:sugar_tracker/app/utils/constants.dart';
 import '../../../models/sugar_data.dart';
 import '../../../modules/open_ai_module.dart';
 import '../../../modules/supabase_modules.dart';
+import '../../../utils/opan_ai_config.dart';
 
-final supabaseHelper = SupabaseHelpers();
+final supabaseHelper = SupabaseHelpers(supabase);
+
+final openAiConfig = OpenAiConfig.withApiKey();
+final openAI = OpenAiApi(apiKey: openAiConfig.apiKey ?? '');
 
 final diabetesDataProvider = FutureProvider<List<dynamic>>((ref) async {
   return await supabaseHelper.fetchDiabetesData();
@@ -13,7 +17,7 @@ final diabetesDataProvider = FutureProvider<List<dynamic>>((ref) async {
 
 final reportProvider = FutureProvider<String>((ref) async {
   final diabetesData = await ref.watch(diabetesDataProvider.future);
-  final report = await fetchOpenAIResponse(diabetesData);
+  final report = await openAI.fetchOpenAIResponse(diabetesData);
   return report;
 });
 

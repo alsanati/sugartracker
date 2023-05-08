@@ -19,10 +19,10 @@ class _CustomBottomNavigationbarState extends State<CustomBottomNavigationBar> {
         currentIndex: _calculateSelectedIndex(context),
         onTap: onTap,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: 'Charts'),
+          BottomNavigationBarItem(icon: Icon(Icons.feed), label: 'Feed'),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_box), label: 'Account'),
+              icon: Icon(Icons.account_tree), label: 'Account'),
         ],
       ),
     );
