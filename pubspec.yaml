@@ -74,4 +74,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/diabetes_report.md
+    - assets/.env
 

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/app/models/sugar_data.dart';
 
 class HomepageState {

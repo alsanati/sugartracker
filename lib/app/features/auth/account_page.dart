@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 
@@ -128,6 +127,10 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).copyWith(
+        useMaterial3:
+            true); // Opt-in to Material 3 [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
@@ -140,20 +143,45 @@ class _AccountPageState extends State<AccountPage> {
           const SizedBox(height: 18),
           TextFormField(
             controller: _usernameController,
-            decoration: const InputDecoration(labelText: 'User Name'),
+            decoration: InputDecoration(
+              labelText: 'User Name',
+              labelStyle: theme.textTheme
+                  .subtitle1, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+            ),
           ),
           const SizedBox(height: 18),
           TextFormField(
             controller: _websiteController,
-            decoration: const InputDecoration(labelText: 'Website'),
+            decoration: InputDecoration(
+              labelText: 'Website',
+              labelStyle: theme.textTheme
+                  .subtitle1, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+            ),
           ),
           const SizedBox(height: 18),
           ElevatedButton(
             onPressed: _updateProfile,
             child: Text(_loading ? 'Saving...' : 'Update'),
+            style: ElevatedButton.styleFrom(
+              primary: theme.colorScheme
+                  .primary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+              onPrimary: theme.colorScheme
+                  .onPrimary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+              elevation:
+                  4, // Apply Material 3 elevation support [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+            ),
           ),
           const SizedBox(height: 18),
-          TextButton(onPressed: _signOut, child: const Text('Sign Out')),
+          TextButton(
+            onPressed: _signOut,
+            child: const Text('Sign Out'),
+            style: TextButton.styleFrom(
+              primary: theme.colorScheme
+                  .primary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+              onSurface: theme.colorScheme
+                  .onSurface, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
+            ),
+          ),
         ],
       ),
     );

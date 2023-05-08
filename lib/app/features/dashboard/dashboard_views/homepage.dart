@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/current_sugar_stats.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/sugar_level_cards.dart';
-import 'package:sugar_tracker/app/utils/utils.dart';
 import '../components/expandable_fab.dart';
 import '../state/homepage_state.dart';
 

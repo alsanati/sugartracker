@@ -8,7 +8,8 @@ class SugarDataListView extends StatelessWidget {
   final List<SugarData> sugarData;
   final WidgetRef ref;
 
-  SugarDataListView({Key? key, required this.sugarData, required this.ref})
+  const SugarDataListView(
+      {Key? key, required this.sugarData, required this.ref})
       : super(key: key);
 
   @override
@@ -18,9 +19,8 @@ class SugarDataListView extends StatelessWidget {
     final todayData = sugarData.where((sugarData) {
       final date = sugarData.createdAt!;
       final currentDate = DateTime.now();
-      return date.year == currentDate.year &&
-          date.month == currentDate.month &&
-          date.day == currentDate.day;
+      return date.isAfter(currentDate.subtract(const Duration(days: 1))) &&
+          date.isBefore(currentDate.add(const Duration(seconds: 1)));
     }).toList();
 
     return RefreshIndicator(

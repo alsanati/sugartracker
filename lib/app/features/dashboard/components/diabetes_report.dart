@@ -5,25 +5,40 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/homepage_state.dart';
 
 class DiabetesReport extends ConsumerWidget {
-  const DiabetesReport({super.key});
+  const DiabetesReport({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reportAsyncValue = ref.watch(reportProvider);
+    final diabetesData = ref.watch(diabetesDataProvider);
 
-    return reportAsyncValue.when(
-      data: (report) => SizedBox(
-        width: double.infinity,
-        // ignore: deprecated_member_use
-        child: TypewriterAnimatedTextKit(
-          text: [report],
-          textStyle: const TextStyle(fontSize: 16.0),
-          textAlign: TextAlign.start,
-          speed: const Duration(milliseconds: 50),
-        ),
-      ),
-      loading: () => const CircularProgressIndicator(),
-      error: (error, _) => Text('Error: $error'),
+    return diabetesData.when(
+      loading: () => const Center(
+          child: SizedBox(
+              width: 50, height: 50, child: CircularProgressIndicator())),
+      error: (Object error, StackTrace stackTrace) {
+        return Scaffold(body: Center(child: Text('$error')));
+      },
+      data: (diabetesDataList) {
+        // Convert diabetesDataList to a list of strings
+        List<String> diabetesDataStringList =
+            diabetesDataList.map((data) => data.toString()).toList();
+
+        if (diabetesDataList.isEmpty) {
+          return Scaffold(
+            body: Center(child: Text("No response from Chatbot.")),
+          );
+        }
+
+        return SizedBox(
+          width: double.infinity,
+          child: TypewriterAnimatedTextKit(
+            text: diabetesDataStringList,
+            textStyle: const TextStyle(fontSize: 16.0),
+            textAlign: TextAlign.start,
+            speed: const Duration(milliseconds: 25),
+          ),
+        );
+      },
     );
   }
 }
