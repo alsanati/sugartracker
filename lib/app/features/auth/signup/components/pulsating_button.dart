@@ -1,12 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 
 class PulsatingRoundButton extends StatefulWidget {
-  const PulsatingRoundButton({super.key, required this.onPressed});
+  const PulsatingRoundButton(
+      {super.key, required this.onPressed, required this.onFinished});
 
-  final VoidCallback onPressed;
+  final Future<void> Function() onPressed;
+  final VoidCallback? onFinished; // Add this line
 
   @override
   State<PulsatingRoundButton> createState() => _PulsatingRoundButtonState();
@@ -45,7 +46,7 @@ class _PulsatingRoundButtonState extends State<PulsatingRoundButton>
         begin: Colors.transparent, end: Theme.of(context).colorScheme.error);
 
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         setState(() {
           _arrowTapped = true;
         });
@@ -53,8 +54,8 @@ class _PulsatingRoundButtonState extends State<PulsatingRoundButton>
           _animationController!.addListener(() {
             setState(() {});
           });
-          widget.onPressed();
-          context.go("/home");
+          await widget.onPressed();
+          widget.onFinished?.call();
         }
       },
       child: AnimatedBuilder(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/features/auth/signup/stepper_page_state.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
@@ -200,19 +201,24 @@ class _StepperPageState extends ConsumerState<StepperPage> {
                 const SizedBox(height: 10),
                 _buildDataStorageInfo(),
                 const SizedBox(height: 150),
-                PulsatingRoundButton(onPressed: () {
-                  supabaseHelper.insertPatientData(
-                      formControllers.firstNameController.text,
-                      formControllers.lastNameController.text,
-                      formControllers.addressController.text,
-                      ref.read(selectedDateProvider),
-                      formControllers.cityCodeController.text,
-                      formControllers.addressController.text,
-                      formControllers.countryController.text,
-                      int.parse(formControllers.cityCodeController.text),
-                      123,
-                      "email");
-                })
+                PulsatingRoundButton(
+                  onPressed: () async {
+                    await supabaseHelper.insertPatientData(
+                        formControllers.firstNameController.text,
+                        formControllers.lastNameController.text,
+                        formControllers.addressController.text,
+                        ref.read(selectedDateProvider),
+                        formControllers.cityCodeController.text,
+                        formControllers.addressController.text,
+                        formControllers.countryController.text,
+                        int.parse(formControllers.cityCodeController.text),
+                        123,
+                        "email");
+                  },
+                  onFinished: () {
+                    context.go("/home");
+                  },
+                )
               ],
             ),
           ),

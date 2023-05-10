@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 
@@ -22,11 +23,14 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
         _isLoading = true;
       });
       try {
-        final userId = supabase.auth.currentUser!.id;
+        final userId = supabase.auth.currentUser?.id;
+        final patientId = await supabase.patient.getCurrentPatientId();
         final sugarLevels = _sugarLevelController.text;
-        await supabase
-            .from('diabetes_sugar')
-            .insert({'personId': userId, 'sugar_level': sugarLevels});
+        await supabase.from('diabetes_sugar').insert({
+          'personId': userId,
+          'sugar_level': sugarLevels,
+          'patient_id': patientId
+        });
         if (mounted) {
           context.showSnackBar(
               message: 'Successfully posted your sugar levels!');
@@ -35,6 +39,7 @@ class PostSugarLevelsState extends State<PostSugarLevels> {
       } on AuthException catch (error) {
         context.showErrorSnackBar(message: error.message);
       } catch (error) {
+        debugPrint(error.toString());
         context.showErrorSnackBar(message: 'Unexpected error occurred');
       }
       setState(() {

@@ -38,7 +38,7 @@ class SupabaseHelpers {
       final data = await supabase
           .from('patient')
           .select()
-          .eq('account_id', userId)
+          .eq('patient_id', userId)
           .single() as Map;
       String username = (data['first_name'] ?? '') as String;
       return username;
@@ -98,6 +98,27 @@ class SupabaseHelpers {
     }
   }
 
+  Future<int?> getCurrentPatientId() async {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      final response = await supabase
+          .from('patient')
+          .select('id')
+          .eq('patient_id', userId)
+          .single();
+
+      if (response != null) {
+        return response != null && response.isNotEmpty ? response['id'] : null;
+      } else {
+        debugPrint('Error fetching current patient ID: ${response.error}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Error fetching current patient ID: $e');
+      return null;
+    }
+  }
+
   Future<void> logout(context) async {
     await supabase.auth.signOut();
     Navigator.pushReplacementNamed(context, "login");
@@ -123,7 +144,7 @@ class SupabaseHelpers {
         'first_name': firstName,
         'last_name': lastName,
         'birthday': birthday.toString(),
-        'account_id': userId.id
+        'patient_id': userId.id
       }
     ]).select();
 
