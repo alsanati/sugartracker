@@ -1,6 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
-import 'food_item.dart'; // Import the FoodItem class
 
 part 'meals.freezed.dart';
 part 'meals.g.dart';
@@ -10,15 +8,27 @@ enum MealType { breakfast, lunch, dinner, snack }
 @freezed
 class Meal with _$Meal {
   factory Meal({
-    required int mealId,
-    required int userId,
     required MealType mealType,
-    required DateTime mealDate,
     required DateTime mealTime,
-    required List<FoodItem> foodItems,
+    required num carbs,
+    required num protein,
+    required num fat,
+    required num calories,
+    required String mealName,
     required DateTime createdAt,
-    required DateTime updatedAt,
   }) = _Meal;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'mealType': mealType.toString().split('.').last,
+        'mealTime': mealTime.toIso8601String(),
+        'carbs': carbs,
+        'protein': protein,
+        'fat': fat,
+        'calories': calories,
+        'mealName': mealName,
+        'createdAt': createdAt.toIso8601String(),
+      };
 
   factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
 }

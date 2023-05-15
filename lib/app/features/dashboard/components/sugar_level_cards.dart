@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../models/sugar_data.dart';
+import '../../feed/state/feed_page_state.dart';
 import '../state/homepage_state.dart';
 
 class SugarDataListView extends StatelessWidget {
-  final List<SugarData> sugarData;
+  final List<dynamic> sugarData;
   final WidgetRef ref;
 
   const SugarDataListView(
@@ -27,6 +28,8 @@ class SugarDataListView extends StatelessWidget {
       onRefresh: () async {
         ref.invalidate(homePageProvider);
         ref.invalidate(getCurrentSugarDataStats);
+        ref.invalidate(mealStreamProvider);
+        ref.invalidate(sugarStreamProvider);
       },
       child: ListView.builder(
         itemCount: todayData.length,

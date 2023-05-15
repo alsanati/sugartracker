@@ -25,7 +25,7 @@ class _ChartState extends State<Chart> {
   Widget build(BuildContext context) {
     final colorPrimary = Theme.of(context).colorScheme.secondaryContainer;
     final colorSecondary = Theme.of(context).colorScheme.surface;
-    final text = Theme.of(context).textTheme.labelSmall;
+    final text = Theme.of(context).textTheme.titleSmall;
 
     return Card(
       color: colorPrimary,

@@ -2,20 +2,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_sugar_data.dart';
+import 'package:sugar_tracker/app/features/feed/views/feed_page.dart';
+import 'package:sugar_tracker/app/features/reminders/reminder_page.dart';
 
 import 'package:sugar_tracker/text_theme.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:timezone/standalone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 import 'app/features/auth/account_page.dart';
 import 'app/features/auth/login/login_page.dart';
 import 'app/features/auth/signup/signup_page.dart';
 import 'app/features/auth/signup/stepper_form_page.dart';
 import 'app/features/auth/splash_page.dart';
-import 'app/features/charts/chart.dart';
 import 'app/features/dashboard/dashboard_views/homepage.dart';
+import 'app/features/reminders/reminder.dart';
+import 'app/features/reminders/reminder_service.dart';
 import 'app/utils/color_schemes.g.dart';
 import 'app/utils/constants.dart';
 import 'package:go_router/go_router.dart';
@@ -63,16 +68,16 @@ final router = GoRouter(
             },
           ),
           GoRoute(
-            path: '/dashboard',
+            path: '/feed',
             pageBuilder: (context, state) {
-              return const MaterialPage(child: Chart());
+              return const MaterialPage(child: FeedPage());
             },
           ),
           GoRoute(
               path: '/account',
               pageBuilder: (context, state) {
                 return const MaterialPage(
-                  child: AccountPage(),
+                  child: ReminderPage(),
                 );
               }),
           GoRoute(
@@ -150,6 +155,26 @@ final router = GoRouter(
 );
 
 Future<void> main() async {
+  tz.initializeTimeZones();
+  tz.setLocalLocation(
+      tz.getLocation('Europe/London')); // replace with the appropriate location
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+  const IOSInitializationSettings initializationSettingsIOS =
+      IOSInitializationSettings();
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+
+  await NotificationService().flutterLocalNotificationsPlugin.initialize(
+      initializationSettings, onSelectNotification: (String? payload) async {
+    // Handle notification tap
+  });
+
   await dotenv.load(fileName: "assets/.env");
   await Supabase.initialize(
     url: Constants.supabaseUrl,
@@ -168,7 +193,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: darkColorScheme,
           textTheme: textTheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
     );
   }
 }

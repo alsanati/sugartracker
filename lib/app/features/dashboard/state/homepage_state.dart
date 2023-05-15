@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sugar_tracker/app/features/feed/state/feed_page_state.dart';
 import 'package:sugar_tracker/app/models/homepage.dart';
+import 'package:sugar_tracker/app/modules/meal_module.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 import '../../../models/sugar_data.dart';
 import '../../../modules/open_ai_module.dart';
@@ -11,13 +13,15 @@ final supabaseHelper = SupabaseHelpers(supabase);
 final openAiConfig = OpenAiConfig.withApiKey();
 final openAI = OpenAiApi(apiKey: openAiConfig.apiKey ?? '');
 
-final diabetesDataProvider = FutureProvider<List<dynamic>>((ref) async {
+final diabetesDataProvider = FutureProvider<List<SugarData>>((ref) async {
   return await supabaseHelper.fetchDiabetesData();
 });
 
 final reportProvider = FutureProvider<String>((ref) async {
+  MealRepository meal = MealRepository(supabase);
   final diabetesData = await ref.watch(diabetesDataProvider.future);
-  final report = await openAI.fetchOpenAIResponse(diabetesData);
+  final mealData = await meal.getMeals();
+  final report = await openAI.fetchOpenAIResponse(diabetesData, mealData);
   return report;
 });
 

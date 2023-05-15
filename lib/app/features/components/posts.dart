@@ -23,8 +23,8 @@ class Posts extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: const [
+                  child: const Column(
+                    children: [
                       Text(
                         "Title",
                         // ignore: prefer_const_constructors

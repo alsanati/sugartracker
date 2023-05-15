@@ -18,8 +18,10 @@ class Chart extends ConsumerWidget {
 
     return glucoseData.when(
       loading: () => const Center(
-        child:
-            SizedBox(width: 50, height: 50, child: CircularProgressIndicator()),
+        child: SizedBox(
+            width: 300,
+            height: 300,
+            child: Center(child: CircularProgressIndicator())),
       ),
       error: (err, stack) {
         return Scaffold(

@@ -4,6 +4,8 @@ import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../models/sugar_data.dart';
+
 class SupabaseHelpers {
   final SupabaseClient supabaseClient;
 
@@ -18,7 +20,28 @@ class SupabaseHelpers {
     return response;
   }
 
-  Future<List<dynamic>> fetchDiabetesData() async {
+  Future<void> upload(
+      String tableName, Object payload, BuildContext context) async {
+    try {
+      final response = await supabase.from(tableName).insert(payload);
+      if (response != null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Upload successful")));
+        }
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Unexpected error occured :()"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<List<SugarData>> fetchDiabetesData() async {
     // Get today's date formatted as yyyy-MM-dd
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -28,8 +51,10 @@ class SupabaseHelpers {
         .select()
         .filter('created_at', 'gte', today);
 
+    List<SugarData> sugarLevels = SugarData.getListMap(response);
+
     // Use the first row of data for this example
-    return response;
+    return sugarLevels;
   }
 
   Future<String> getCurrentUser() async {
@@ -98,7 +123,7 @@ class SupabaseHelpers {
     }
   }
 
-  Future<int?> getCurrentPatientId() async {
+  Future getCurrentPatientId() async {
     try {
       final userId = supabase.auth.currentUser?.id;
       final response = await supabase

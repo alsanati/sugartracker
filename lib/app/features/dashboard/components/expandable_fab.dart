@@ -186,14 +186,13 @@ class _ExpandingActionButton extends StatelessWidget {
 
 @immutable
 class ActionButton extends StatelessWidget {
-  const ActionButton({
-    Key? key,
-    this.onPressed,
-    required this.label,
-  }) : super(key: key);
+  const ActionButton(
+      {Key? key, this.onPressed, required this.label, required this.context})
+      : super(key: key);
 
   final VoidCallback? onPressed;
   final String label;
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
