@@ -9,27 +9,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Upgrade Dart
-      run: dart pub upgrade
-
-    - name: Upgrade Flutter
-      run: flutter upgrade
-
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v1.10.0
-      with:
-        flutter-version: '3.10.0'
-        channel: 'stable'
-
-    - name: Install dependencies
-      run: flutter pub get
-
-    - name: Test
-      run: flutter test
-
-    - name: Build APK
-      run: flutter build apk
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # or: 'beta', 'dev' or 'master'
+      - name: Upgrade Dart
+        run: dart pub upgrade
+      - name: Upgrade Flutter
+        run: flutter upgrade
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Test
+        run: flutter test
+      - name: Build APK
+        run: flutter build apk
