@@ -3,15 +3,14 @@ import 'package:rxdart/subjects.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
-  NotificationService._internal() {
-    initializePlatformNotifications();
-  }
+  // Private constructor
+  NotificationService._internal();
 
+  // Static private instance
   static final NotificationService _instance = NotificationService._internal();
 
-  factory NotificationService() {
-    return _instance;
-  }
+  // Public getter
+  static NotificationService get instance => _instance;
 
   final BehaviorSubject<ReceivedNotification>
       didReceiveLocalNotificationSubject =
@@ -20,7 +19,7 @@ class NotificationService {
   final BehaviorSubject<String?> selectNotificationSubject =
       BehaviorSubject<String?>();
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   NotificationAppLaunchDetails? notificationAppLaunchDetails;
@@ -28,14 +27,11 @@ class NotificationService {
   Future<void> initializePlatformNotifications() async {
     const initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        selectNotificationSubject.add(payload);
-      }
-    });
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    print("Notification plugin initialized."); // This will print to console
   }
 
   Future<void> showScheduledLocalNotification({
@@ -46,23 +42,34 @@ class NotificationService {
     required int seconds,
   }) async {
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.max, priority: Priority.high, showWhen: false);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+      'your channel id',
+      'your channel name',
+      playSound: true,
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    var iOSPlatformChannelSpecifics = const DarwinNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+      android: androidPlatformChannelSpecifics,
+      iOS: iOSPlatformChannelSpecifics,
+    );
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        id,
-        title,
-        body,
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds)),
-        platformChannelSpecifics,
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+      id,
+      title,
+      body,
+      tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds)),
+      platformChannelSpecifics,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+    print(
+        "Scheduled local notification with ID: $id"); // This will print to console
   }
+
+  // Add any additional methods as needed
 }
 
 class ReceivedNotification {

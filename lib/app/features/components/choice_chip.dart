@@ -40,7 +40,7 @@ class ChoiceChipDropdown<T> extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           border: Border.all(color: Theme.of(context).colorScheme.onSurface),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Text(
           labelBuilder(value),
           style: TextStyle(

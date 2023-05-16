@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sugar_tracker/app/utils/constants.dart';
-import 'package:sugar_tracker/app/utils/utils.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../models/meals.dart';

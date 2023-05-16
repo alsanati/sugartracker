@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sugar_tracker/app/features/reminders/reminder_service.dart';
-import 'package:timezone/standalone.dart';
 import 'package:timezone/timezone.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -70,8 +69,11 @@ class _ReminderFormState extends State<ReminderForm> {
         _selectedTime.minute,
       );
 
-      // Schedule the reminder notification
-      await NotificationService().showScheduledLocalNotification(
+      // Create an instance of NotificationService
+      NotificationService notificationService = NotificationService.instance;
+
+      // Schedule the reminder notification using the instance
+      await notificationService.showScheduledLocalNotification(
         id: 123,
         title: title,
         body: message,
@@ -242,12 +244,22 @@ class _ReminderListState extends State<ReminderList> {
       itemCount: _reminders.length,
       itemBuilder: (context, index) {
         final reminder = _reminders[index];
-        return ListTile(
-          title: Text(reminder.title),
-          subtitle: Text(reminder.message),
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => _deleteReminder(reminder.id),
+        return Card(
+          child: ListTile(
+            title: Text(reminder.title,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Message: ${reminder.message}"),
+                Text("Time: ${reminder.time.format(context)}"),
+                Text("Recurring: ${reminder.recurring ? "Yes" : "No"}"),
+              ],
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => _deleteReminder(reminder.id),
+            ),
           ),
         );
       },

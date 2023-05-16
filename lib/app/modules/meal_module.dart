@@ -14,15 +14,15 @@ class MealRepository {
     try {
       final response = await supabase.from('meals').insert([
         {
-          'patient_id': await supabase.patient.getCurrentPatientId(),
+          'patientId': await supabase.patient.getCurrentPatientId(),
           'calories': meal.calories.round(),
-          'total_carbohydrates': meal.carbs.round(),
+          'carbs': meal.carbs.round(),
           'protein': meal.protein.round(),
           'fat': meal.fat.round(),
           'mealTime': meal.mealTime.toIso8601String(),
-          'created_at': meal.createdAt.toIso8601String(),
-          'meal_type': meal.mealType.toString().split('.').last,
-          'meal_name': meal.mealName,
+          'createdAt': meal.createdAt.toIso8601String(),
+          'mealType': meal.mealType.toString().split('.').last,
+          'mealName': meal.mealName,
         },
       ]);
       if (response == null) {

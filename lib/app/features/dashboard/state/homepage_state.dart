@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sugar_tracker/app/features/feed/state/feed_page_state.dart';
 import 'package:sugar_tracker/app/models/homepage.dart';
 import 'package:sugar_tracker/app/modules/meal_module.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';

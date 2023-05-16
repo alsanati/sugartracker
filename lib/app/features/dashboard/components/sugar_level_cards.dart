@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../../models/sugar_data.dart';
 import '../../feed/state/feed_page_state.dart';
 import '../state/homepage_state.dart';
 
