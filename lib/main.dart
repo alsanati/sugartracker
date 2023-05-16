@@ -73,16 +73,19 @@ final router = GoRouter(
             },
           ),
           GoRoute(
-            path: '/diabesreport',
-            pageBuilder: (context, state) {
-              return const MaterialPage(child: MyMarkDownWidget());
-            },
-          ),
-          GoRoute(
             path: '/reportdialog',
             pageBuilder: (context, state) {
               return const MaterialPage(child: ConfirmationPage());
             },
+            routes: [
+              GoRoute(
+                path: 'diabetesreport',
+                parentNavigatorKey: _rootNavigatorKey,
+                pageBuilder: (context, state) {
+                  return const MaterialPage(child: MyMarkDownWidget());
+                },
+              ),
+            ],
           ),
           GoRoute(
               path: '/account',

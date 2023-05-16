@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/features/charts/components/charts.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/current_sugar_stats.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
@@ -27,6 +29,20 @@ class Homepage extends ConsumerWidget {
       },
       data: (user) {
         return Scaffold(
+          appBar: AppBar(
+              centerTitle: false,
+              title: Text(
+                "Hi, ${user.user} ",
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              actions: [
+                IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.envelope),
+                    onPressed: () {
+                      GoRouter.of(context).go('/reportdialog');
+                    })
+              ]),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
@@ -37,13 +53,6 @@ class Homepage extends ConsumerWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Hi, ${user.user} ",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
                         Center(child: GlucoseStats(sugardata: user.sugarData)),
                         const SizedBox(height: 20),
                         const TabBar(
@@ -79,7 +88,6 @@ class Homepage extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        DiabetesReport(),
                       ]),
                     ),
                   ],

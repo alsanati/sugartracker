@@ -1,60 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/utils/utils.dart';
 
-import '../state/homepage_state.dart';
+final dialogShownProvider =
+    StateNotifierProvider<DialogNotifier, bool>((ref) => DialogNotifier());
 
-class ConfirmationPage extends StatelessWidget {
-  const ConfirmationPage({super.key});
+class DialogNotifier extends StateNotifier<bool> {
+  DialogNotifier() : super(false);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: AlertDialog(
-        title: const Text('Diabetes Report'),
-        content: const Text('Do you agree to view the diabetes report?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/home'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/diabetesreport'),
-            child: const Text('Agree'),
-          ),
-        ],
-      ),
-    );
+  void showDialog(bool value) {
+    state = value;
   }
 }
 
-class DiabetesReport extends ConsumerWidget {
-  const DiabetesReport({Key? key}) : super(key: key);
+class ConfirmationPage extends ConsumerWidget {
+  const ConfirmationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final diabetesData = ref.watch(reportProvider);
+    final dialogShown = ref.watch(dialogShownProvider);
 
-    return diabetesData.when(
-      loading: () => const Center(
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: CircularProgressIndicator(),
+    return WillPopScope(
+      onWillPop: () async {
+        ref.read(dialogShownProvider.notifier).showDialog(false);
+        GoRouter.of(context).go('/home');
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                GoRouter.of(context).go('/home');
+              },
+              icon: const Icon(Icons.arrow_back)),
+          title: const Text("Diabetes Report"),
+        ),
+        body: SafeArea(
+          child: Center(
+            child: dialogShown
+                ? const MyMarkDownWidget()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Do you agree to create the diabetes report?'),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              ref
+                                  .read(dialogShownProvider.notifier)
+                                  .showDialog(false);
+                              GoRouter.of(context).go('/home');
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              ref
+                                  .read(dialogShownProvider.notifier)
+                                  .showDialog(true);
+                            },
+                            child: const Text('Agree'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
-      error: (Object error, StackTrace stackTrace) => Scaffold(
-        body: Center(child: Text('$error')),
-      ),
-      data: (diabetesDataList) {
-        if (diabetesDataList.isEmpty) {
-          return const Scaffold(
-            body: Center(child: Text("No response from Chatbot.")),
-          );
-        }
-
-        return MyMarkDownWidget();
-      },
     );
   }
 }
