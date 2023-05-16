@@ -31,8 +31,6 @@ final homePageProvider = FutureProvider<HomepageState>((ref) async {
 });
 
 Future<List<SugarData>> getSugarStats() async {
-  // Here you would fetch the sugar data from your data source
-  // and return a List<SugarData>.
   final response = await supabase
       .from('diabetes_sugar')
       .select()
