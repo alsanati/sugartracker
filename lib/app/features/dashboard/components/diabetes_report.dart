@@ -4,6 +4,30 @@ import 'package:sugar_tracker/app/utils/utils.dart';
 
 import '../state/homepage_state.dart';
 
+class ConfirmationPage extends StatelessWidget {
+  const ConfirmationPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AlertDialog(
+        title: const Text('Diabetes Report'),
+        content: const Text('Do you agree to view the diabetes report?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pushNamed(context, '/home'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pushNamed(context, '/diabetesreport'),
+            child: const Text('Agree'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class DiabetesReport extends ConsumerWidget {
   const DiabetesReport({Key? key}) : super(key: key);
 
@@ -13,22 +37,23 @@ class DiabetesReport extends ConsumerWidget {
 
     return diabetesData.when(
       loading: () => const Center(
-          child: SizedBox(
-              width: 50, height: 50, child: CircularProgressIndicator())),
-      error: (Object error, StackTrace stackTrace) {
-        return Scaffold(body: Center(child: Text('$error')));
-      },
+        child: SizedBox(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      error: (Object error, StackTrace stackTrace) => Scaffold(
+        body: Center(child: Text('$error')),
+      ),
       data: (diabetesDataList) {
-        // Convert diabetesDataList to a list of strings
-
         if (diabetesDataList.isEmpty) {
           return const Scaffold(
             body: Center(child: Text("No response from Chatbot.")),
           );
         }
 
-        return const SizedBox(
-            width: double.infinity, child: MyMarkDownWidget());
+        return MyMarkDownWidget();
       },
     );
   }

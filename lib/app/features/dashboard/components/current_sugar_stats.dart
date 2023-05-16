@@ -120,8 +120,9 @@ class GlucoseStats extends StatelessWidget {
           children: [
             Text(
               title,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onBackground),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -130,8 +131,8 @@ class GlucoseStats extends StatelessWidget {
                   title == 'Avg.' && doubleValue != null
                       ? doubleValue.toString()
                       : value.toString(),
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                 ),
                 if (title == 'Avg.')
                   Text(

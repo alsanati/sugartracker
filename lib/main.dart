@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
+import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_sugar_data.dart';
 import 'package:sugar_tracker/app/features/feed/views/feed_page.dart';
 import 'package:sugar_tracker/app/features/reminders/reminder_page.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
 
 import 'package:sugar_tracker/text_theme.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -68,6 +70,18 @@ final router = GoRouter(
             path: '/feed',
             pageBuilder: (context, state) {
               return const MaterialPage(child: FeedPage());
+            },
+          ),
+          GoRoute(
+            path: '/diabesreport',
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: MyMarkDownWidget());
+            },
+          ),
+          GoRoute(
+            path: '/reportdialog',
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: ConfirmationPage());
             },
           ),
           GoRoute(

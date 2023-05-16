@@ -142,7 +142,7 @@ class _ReminderFormState extends State<ReminderForm> {
                         return null;
                       },
                     ),
-                    Row(
+                    Column(
                       children: [
                         Row(
                           children: [
@@ -167,10 +167,6 @@ class _ReminderFormState extends State<ReminderForm> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
                             Checkbox(
                               value: _isRecurring,
                               onChanged: (value) {
@@ -182,9 +178,15 @@ class _ReminderFormState extends State<ReminderForm> {
                             const Text('Recurring'),
                           ],
                         ),
-                        ElevatedButton(
-                          onPressed: _saveReminder,
-                          child: const Text('Save Reminder'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            onPressed: _saveReminder,
+                            child: const Text('Save Reminder'),
+                          ),
                         ),
                       ],
                     ),
@@ -247,10 +249,11 @@ class _ReminderListState extends State<ReminderList> {
         return Card(
           child: ListTile(
             title: Text(reminder.title,
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Divider(),
                 Text("Message: ${reminder.message}"),
                 Text("Time: ${reminder.time.format(context)}"),
                 Text("Recurring: ${reminder.recurring ? "Yes" : "No"}"),
