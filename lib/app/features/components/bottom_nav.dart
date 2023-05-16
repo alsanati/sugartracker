@@ -48,7 +48,7 @@ class _CustomBottomNavigationbarState extends State<CustomBottomNavigationBar> {
       case 0:
         return context.go('/home');
       case 1:
-        return context.go('/dashboard');
+        return context.go('/feed');
       case 2:
         return context.go('/account');
       default:

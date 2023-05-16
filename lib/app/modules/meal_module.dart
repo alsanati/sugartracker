@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/meals.dart';
@@ -8,34 +10,46 @@ class MealRepository {
   MealRepository(this.supabase);
 
   // Add a meal to the database
-  Future<void> addMeal(Meal meal) async {
-    final response = await supabase.from('meals').insert([
-      {
-        'mealId': meal.mealId,
-        'userId': meal.userId,
-        'mealType': meal.mealType.toString(),
-        'mealDate': meal.mealDate.toIso8601String(),
-        'mealTime': meal.mealTime.toIso8601String(),
-        'foodItems': meal.foodItems.map((item) => item.toJson()).toList(),
-        'createdAt': meal.createdAt.toIso8601String(),
-        'updatedAt': meal.updatedAt.toIso8601String(),
-      },
-    ]);
-
-    if (response.status != 200) {
-      throw Exception('Failed to add meal: ${response.status}');
+  Future<void> addMeal(Meal meal, BuildContext context) async {
+    try {
+      final response = await supabase.from('meals').insert([
+        {
+          'patientId': await supabase.patient.getCurrentPatientId(),
+          'calories': meal.calories.round(),
+          'carbs': meal.carbs.round(),
+          'protein': meal.protein.round(),
+          'fat': meal.fat.round(),
+          'mealTime': meal.mealTime.toIso8601String(),
+          'createdAt': meal.createdAt.toIso8601String(),
+          'mealType': meal.mealType.toString().split('.').last,
+          'mealName': meal.mealName,
+        },
+      ]);
+      if (response == null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Meal added")));
+        }
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Unexpected error occured :("),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   // Get meals for a user
-  Future<List<Meal>> getMeals(int userId) async {
-    final response =
-        await supabase.from('meals').select().eq('userId', userId).execute();
+  Future<List<Meal>> getMeals() async {
+    final response = await supabase.from('meals').select().eq('patientId', 29);
 
-    if (response.status != 200) {
-      throw Exception('Failed to fetch meals: ${response.status}');
+    if (response == null) {
+      throw Exception('Failed to fetch meals: $response');
     } else {
-      return (response.data as List)
+      return (response as List)
           .map((mealJson) => Meal.fromJson(mealJson))
           .toList();
     }

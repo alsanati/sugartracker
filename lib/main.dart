@@ -2,19 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_sugar_data.dart';
+import 'package:sugar_tracker/app/features/feed/views/feed_page.dart';
+import 'package:sugar_tracker/app/features/reminders/reminder_page.dart';
 
 import 'package:sugar_tracker/text_theme.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'app/features/auth/account_page.dart';
+import 'package:timezone/standalone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 import 'app/features/auth/login/login_page.dart';
 import 'app/features/auth/signup/signup_page.dart';
 import 'app/features/auth/signup/stepper_form_page.dart';
 import 'app/features/auth/splash_page.dart';
-import 'app/features/charts/chart.dart';
 import 'app/features/dashboard/dashboard_views/homepage.dart';
 import 'app/utils/color_schemes.g.dart';
 import 'app/utils/constants.dart';
@@ -63,16 +65,16 @@ final router = GoRouter(
             },
           ),
           GoRoute(
-            path: '/dashboard',
+            path: '/feed',
             pageBuilder: (context, state) {
-              return const MaterialPage(child: Chart());
+              return const MaterialPage(child: FeedPage());
             },
           ),
           GoRoute(
               path: '/account',
               pageBuilder: (context, state) {
                 return const MaterialPage(
-                  child: AccountPage(),
+                  child: ReminderPage(),
                 );
               }),
           GoRoute(
@@ -150,6 +152,25 @@ final router = GoRouter(
 );
 
 Future<void> main() async {
+  tz.initializeTimeZones();
+  tz.setLocalLocation(
+      tz.getLocation('Europe/Berlin')); // replace with the appropriate location
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings();
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   await dotenv.load(fileName: "assets/.env");
   await Supabase.initialize(
     url: Constants.supabaseUrl,

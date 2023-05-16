@@ -4,6 +4,8 @@ import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../models/sugar_data.dart';
+
 class SupabaseHelpers {
   final SupabaseClient supabaseClient;
 
@@ -18,7 +20,28 @@ class SupabaseHelpers {
     return response;
   }
 
-  Future<List<dynamic>> fetchDiabetesData() async {
+  Future<void> upload(
+      String tableName, Object payload, BuildContext context) async {
+    try {
+      final response = await supabase.from(tableName).insert(payload);
+      if (response != null) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Upload successful")));
+        }
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Unexpected error occured :()"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<List<SugarData>> fetchDiabetesData() async {
     // Get today's date formatted as yyyy-MM-dd
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -28,8 +51,10 @@ class SupabaseHelpers {
         .select()
         .filter('created_at', 'gte', today);
 
+    List<SugarData> sugarLevels = SugarData.getListMap(response);
+
     // Use the first row of data for this example
-    return response;
+    return sugarLevels;
   }
 
   Future<String> getCurrentUser() async {
@@ -38,7 +63,7 @@ class SupabaseHelpers {
       final data = await supabase
           .from('patient')
           .select()
-          .eq('account_id', userId)
+          .eq('patient_id', userId)
           .single() as Map;
       String username = (data['first_name'] ?? '') as String;
       return username;
@@ -98,6 +123,27 @@ class SupabaseHelpers {
     }
   }
 
+  Future getCurrentPatientId() async {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      final response = await supabase
+          .from('patient')
+          .select('id')
+          .eq('patient_id', userId)
+          .single();
+
+      if (response != null) {
+        return response != null && response.isNotEmpty ? response['id'] : null;
+      } else {
+        debugPrint('Error fetching current patient ID: ${response.error}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Error fetching current patient ID: $e');
+      return null;
+    }
+  }
+
   Future<void> logout(context) async {
     await supabase.auth.signOut();
     Navigator.pushReplacementNamed(context, "login");
@@ -123,7 +169,7 @@ class SupabaseHelpers {
         'first_name': firstName,
         'last_name': lastName,
         'birthday': birthday.toString(),
-        'account_id': userId.id
+        'patient_id': userId.id
       }
     ]).select();
 

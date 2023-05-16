@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/features/charts/components/charts.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/current_sugar_stats.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
-import 'package:sugar_tracker/app/features/dashboard/components/sugar_level_cards.dart';
+import 'package:sugar_tracker/app/features/dashboard/components/get_meal_data.dart';
 import '../components/expandable_fab.dart';
+import '../components/get_sugar_data.dart';
 import '../state/homepage_state.dart';
 
 class Homepage extends ConsumerWidget {
@@ -31,7 +31,7 @@ class Homepage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(25.0),
               child: DefaultTabController(
-                length: 3,
+                length: 2,
                 child: Column(
                   children: [
                     Column(
@@ -50,22 +50,19 @@ class Homepage extends ConsumerWidget {
                           tabs: [
                             Tab(icon: Icon(Icons.bar_chart)),
                             Tab(icon: Icon(Icons.summarize)),
-                            Tab(icon: Icon(Icons.telegram)),
                           ],
                         ),
                       ],
                     ),
-                    Expanded(
+                    const Expanded(
                       child: TabBarView(children: [
-                        SugarDataListView(sugarData: user.sugarData, ref: ref),
-                        const DiabetesReport(),
                         SingleChildScrollView(
                           // To enable scrolling if content overflows
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 SizedBox(height: 20),
                                 Chart(days: 7, titleText: "Last 7 days"),
                                 SizedBox(height: 20),
@@ -82,6 +79,7 @@ class Homepage extends ConsumerWidget {
                             ),
                           ),
                         ),
+                        DiabetesReport(),
                       ]),
                     ),
                   ],
@@ -95,16 +93,60 @@ class Homepage extends ConsumerWidget {
               distance: 56.0,
               children: [
                 ActionButton(
-                  onPressed: () => GoRouter.of(context).go("/home/sugarlevels"),
-                  label: 'Track sugar',
+                  onPressed: () {
+                    // Call the bottom modal sheet here
+                    showModalBottomSheet<void>(
+                      context: context, // Pass the context here
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return const SingleChildScrollView(
+                          child: PostSugarLevelsBottomSheet(),
+                        );
+                      },
+                    );
+                  },
+                  label: 'Add activities',
+                  context: context, // Pass the context here
                 ),
                 ActionButton(
-                  onPressed: () => GoRouter.of(context).go("/home/sugarlevels"),
-                  label: 'Track medication',
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context, // Pass the context here
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: const MealBottomSheet(),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  label: "Add meals",
+                  context: context,
                 ),
                 ActionButton(
-                  onPressed: () => GoRouter.of(context).go("/home/sugarlevels"),
-                  label: 'Track carbs',
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context, // Pass the context here
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: const PostSugarLevelsBottomSheet(),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  label: "Add sugar level",
+                  context: context,
                 ),
               ],
             ),

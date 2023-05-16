@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_this, unnecessary_null_comparison
 
+import 'dart:async';
+
 import 'package:intl/intl.dart';
 
 class SugarData {
@@ -8,7 +10,12 @@ class SugarData {
   DateTime? createdAt;
   int? sugarLevel;
 
-  SugarData({this.id, this.personId, this.createdAt, this.sugarLevel});
+  SugarData({
+    this.id,
+    this.personId,
+    this.createdAt,
+    this.sugarLevel,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -22,17 +29,17 @@ class SugarData {
   factory SugarData.fromJson(dynamic json) {
     return SugarData(
       id: json['id'] as int,
-      personId: json['personId'] as String,
-      createdAt: json['createdAt'] as DateTime,
-      sugarLevel: json['sugarLevel'] as int,
+      personId: json['personId'] as String ?? json['patient_id'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      sugarLevel: json['sugar_level'] as int,
     );
   }
 
   Map<String, dynamic> toJson(response) => <String, dynamic>{
         'id': id,
         'personId': personId,
-        'createdAt': createdAt,
-        'sugarLevel': sugarLevel
+        'createdAt': createdAt?.toIso8601String(),
+        'sugarLevel': sugarLevel,
       };
 
   static dynamic getListMap(List<dynamic> items) {
@@ -52,6 +59,42 @@ class SugarData {
           createdAt: correctFormat));
     }
     return sugarLevels;
+  }
+
+  static Stream<List<SugarData>> getListMapStream(
+      StreamSubscription<List<Map<String, dynamic>>> subscription) {
+    final controller = StreamController<List<SugarData>>();
+
+    subscription.onData((List<Map<String, dynamic>> items) {
+      if (items == null) {
+        controller.add([]);
+        return;
+      }
+
+      List<SugarData> sugarLevels = [];
+      for (var i = 0; i < items.length; i++) {
+        final data = items[i];
+        final date = data["created_at"];
+        final correctFormat =
+            date != null ? DateTime.parse(date) : DateTime.now();
+        sugarLevels.add(SugarData(
+            id: data['id'],
+            personId: data['personId'],
+            sugarLevel: data['sugar_level'],
+            createdAt: correctFormat));
+      }
+      controller.add(sugarLevels);
+    });
+
+    subscription.onError((Object error, StackTrace stackTrace) {
+      controller.addError(error, stackTrace);
+    });
+
+    subscription.onDone(() {
+      controller.close();
+    });
+
+    return controller.stream;
   }
 
   static List<SugarData> getLast7DaysEntries(List<SugarData> sugarDataList) {

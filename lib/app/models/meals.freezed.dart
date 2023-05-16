@@ -20,14 +20,14 @@ Meal _$MealFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Meal {
-  int get mealId => throw _privateConstructorUsedError;
-  int get userId => throw _privateConstructorUsedError;
   MealType get mealType => throw _privateConstructorUsedError;
-  DateTime get mealDate => throw _privateConstructorUsedError;
   DateTime get mealTime => throw _privateConstructorUsedError;
-  List<FoodItem> get foodItems => throw _privateConstructorUsedError;
+  num get carbs => throw _privateConstructorUsedError;
+  num get protein => throw _privateConstructorUsedError;
+  num get fat => throw _privateConstructorUsedError;
+  num get calories => throw _privateConstructorUsedError;
+  String get mealName => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,14 +40,14 @@ abstract class $MealCopyWith<$Res> {
       _$MealCopyWithImpl<$Res, Meal>;
   @useResult
   $Res call(
-      {int mealId,
-      int userId,
-      MealType mealType,
-      DateTime mealDate,
+      {MealType mealType,
       DateTime mealTime,
-      List<FoodItem> foodItems,
-      DateTime createdAt,
-      DateTime updatedAt});
+      num carbs,
+      num protein,
+      num fat,
+      num calories,
+      String mealName,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -63,47 +63,47 @@ class _$MealCopyWithImpl<$Res, $Val extends Meal>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mealId = null,
-    Object? userId = null,
     Object? mealType = null,
-    Object? mealDate = null,
     Object? mealTime = null,
-    Object? foodItems = null,
+    Object? carbs = null,
+    Object? protein = null,
+    Object? fat = null,
+    Object? calories = null,
+    Object? mealName = null,
     Object? createdAt = null,
-    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
-      mealId: null == mealId
-          ? _value.mealId
-          : mealId // ignore: cast_nullable_to_non_nullable
-              as int,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as int,
       mealType: null == mealType
           ? _value.mealType
           : mealType // ignore: cast_nullable_to_non_nullable
               as MealType,
-      mealDate: null == mealDate
-          ? _value.mealDate
-          : mealDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       mealTime: null == mealTime
           ? _value.mealTime
           : mealTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      foodItems: null == foodItems
-          ? _value.foodItems
-          : foodItems // ignore: cast_nullable_to_non_nullable
-              as List<FoodItem>,
+      carbs: null == carbs
+          ? _value.carbs
+          : carbs // ignore: cast_nullable_to_non_nullable
+              as num,
+      protein: null == protein
+          ? _value.protein
+          : protein // ignore: cast_nullable_to_non_nullable
+              as num,
+      fat: null == fat
+          ? _value.fat
+          : fat // ignore: cast_nullable_to_non_nullable
+              as num,
+      calories: null == calories
+          ? _value.calories
+          : calories // ignore: cast_nullable_to_non_nullable
+              as num,
+      mealName: null == mealName
+          ? _value.mealName
+          : mealName // ignore: cast_nullable_to_non_nullable
+              as String,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ) as $Val);
   }
@@ -116,14 +116,14 @@ abstract class _$$_MealCopyWith<$Res> implements $MealCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int mealId,
-      int userId,
-      MealType mealType,
-      DateTime mealDate,
+      {MealType mealType,
       DateTime mealTime,
-      List<FoodItem> foodItems,
-      DateTime createdAt,
-      DateTime updatedAt});
+      num carbs,
+      num protein,
+      num fat,
+      num calories,
+      String mealName,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -135,47 +135,47 @@ class __$$_MealCopyWithImpl<$Res> extends _$MealCopyWithImpl<$Res, _$_Meal>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mealId = null,
-    Object? userId = null,
     Object? mealType = null,
-    Object? mealDate = null,
     Object? mealTime = null,
-    Object? foodItems = null,
+    Object? carbs = null,
+    Object? protein = null,
+    Object? fat = null,
+    Object? calories = null,
+    Object? mealName = null,
     Object? createdAt = null,
-    Object? updatedAt = null,
   }) {
     return _then(_$_Meal(
-      mealId: null == mealId
-          ? _value.mealId
-          : mealId // ignore: cast_nullable_to_non_nullable
-              as int,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as int,
       mealType: null == mealType
           ? _value.mealType
           : mealType // ignore: cast_nullable_to_non_nullable
               as MealType,
-      mealDate: null == mealDate
-          ? _value.mealDate
-          : mealDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       mealTime: null == mealTime
           ? _value.mealTime
           : mealTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      foodItems: null == foodItems
-          ? _value._foodItems
-          : foodItems // ignore: cast_nullable_to_non_nullable
-              as List<FoodItem>,
+      carbs: null == carbs
+          ? _value.carbs
+          : carbs // ignore: cast_nullable_to_non_nullable
+              as num,
+      protein: null == protein
+          ? _value.protein
+          : protein // ignore: cast_nullable_to_non_nullable
+              as num,
+      fat: null == fat
+          ? _value.fat
+          : fat // ignore: cast_nullable_to_non_nullable
+              as num,
+      calories: null == calories
+          ? _value.calories
+          : calories // ignore: cast_nullable_to_non_nullable
+              as num,
+      mealName: null == mealName
+          ? _value.mealName
+          : mealName // ignore: cast_nullable_to_non_nullable
+              as String,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
   }
@@ -183,61 +183,39 @@ class __$$_MealCopyWithImpl<$Res> extends _$MealCopyWithImpl<$Res, _$_Meal>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Meal with DiagnosticableTreeMixin implements _Meal {
+class _$_Meal implements _Meal {
   _$_Meal(
-      {required this.mealId,
-      required this.userId,
-      required this.mealType,
-      required this.mealDate,
+      {required this.mealType,
       required this.mealTime,
-      required final List<FoodItem> foodItems,
-      required this.createdAt,
-      required this.updatedAt})
-      : _foodItems = foodItems;
+      required this.carbs,
+      required this.protein,
+      required this.fat,
+      required this.calories,
+      required this.mealName,
+      required this.createdAt});
 
   factory _$_Meal.fromJson(Map<String, dynamic> json) => _$$_MealFromJson(json);
 
   @override
-  final int mealId;
-  @override
-  final int userId;
-  @override
   final MealType mealType;
   @override
-  final DateTime mealDate;
-  @override
   final DateTime mealTime;
-  final List<FoodItem> _foodItems;
   @override
-  List<FoodItem> get foodItems {
-    if (_foodItems is EqualUnmodifiableListView) return _foodItems;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_foodItems);
-  }
-
+  final num carbs;
+  @override
+  final num protein;
+  @override
+  final num fat;
+  @override
+  final num calories;
+  @override
+  final String mealName;
   @override
   final DateTime createdAt;
-  @override
-  final DateTime updatedAt;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Meal(mealId: $mealId, userId: $userId, mealType: $mealType, mealDate: $mealDate, mealTime: $mealTime, foodItems: $foodItems, createdAt: $createdAt, updatedAt: $updatedAt)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'Meal'))
-      ..add(DiagnosticsProperty('mealId', mealId))
-      ..add(DiagnosticsProperty('userId', userId))
-      ..add(DiagnosticsProperty('mealType', mealType))
-      ..add(DiagnosticsProperty('mealDate', mealDate))
-      ..add(DiagnosticsProperty('mealTime', mealTime))
-      ..add(DiagnosticsProperty('foodItems', foodItems))
-      ..add(DiagnosticsProperty('createdAt', createdAt))
-      ..add(DiagnosticsProperty('updatedAt', updatedAt));
+  String toString() {
+    return 'Meal(mealType: $mealType, mealTime: $mealTime, carbs: $carbs, protein: $protein, fat: $fat, calories: $calories, mealName: $mealName, createdAt: $createdAt)';
   }
 
   @override
@@ -245,34 +223,25 @@ class _$_Meal with DiagnosticableTreeMixin implements _Meal {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Meal &&
-            (identical(other.mealId, mealId) || other.mealId == mealId) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.mealType, mealType) ||
                 other.mealType == mealType) &&
-            (identical(other.mealDate, mealDate) ||
-                other.mealDate == mealDate) &&
             (identical(other.mealTime, mealTime) ||
                 other.mealTime == mealTime) &&
-            const DeepCollectionEquality()
-                .equals(other._foodItems, _foodItems) &&
+            (identical(other.carbs, carbs) || other.carbs == carbs) &&
+            (identical(other.protein, protein) || other.protein == protein) &&
+            (identical(other.fat, fat) || other.fat == fat) &&
+            (identical(other.calories, calories) ||
+                other.calories == calories) &&
+            (identical(other.mealName, mealName) ||
+                other.mealName == mealName) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      mealId,
-      userId,
-      mealType,
-      mealDate,
-      mealTime,
-      const DeepCollectionEquality().hash(_foodItems),
-      createdAt,
-      updatedAt);
+  int get hashCode => Object.hash(runtimeType, mealType, mealTime, carbs,
+      protein, fat, calories, mealName, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -290,33 +259,33 @@ class _$_Meal with DiagnosticableTreeMixin implements _Meal {
 
 abstract class _Meal implements Meal {
   factory _Meal(
-      {required final int mealId,
-      required final int userId,
-      required final MealType mealType,
-      required final DateTime mealDate,
+      {required final MealType mealType,
       required final DateTime mealTime,
-      required final List<FoodItem> foodItems,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_Meal;
+      required final num carbs,
+      required final num protein,
+      required final num fat,
+      required final num calories,
+      required final String mealName,
+      required final DateTime createdAt}) = _$_Meal;
 
   factory _Meal.fromJson(Map<String, dynamic> json) = _$_Meal.fromJson;
 
   @override
-  int get mealId;
-  @override
-  int get userId;
-  @override
   MealType get mealType;
-  @override
-  DateTime get mealDate;
   @override
   DateTime get mealTime;
   @override
-  List<FoodItem> get foodItems;
+  num get carbs;
+  @override
+  num get protein;
+  @override
+  num get fat;
+  @override
+  num get calories;
+  @override
+  String get mealName;
   @override
   DateTime get createdAt;
-  @override
-  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$_MealCopyWith<_$_Meal> get copyWith => throw _privateConstructorUsedError;
