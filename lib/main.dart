@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sugar_tracker/app/features/auth/account_page.dart';
 import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_sugar_data.dart';
@@ -89,6 +91,13 @@ final router = GoRouter(
           ),
           GoRoute(
               path: '/account',
+              pageBuilder: (context, state) {
+                return const MaterialPage(
+                  child: AccountPage(),
+                );
+              }),
+          GoRoute(
+              path: '/reminders',
               pageBuilder: (context, state) {
                 return const MaterialPage(
                   child: ReminderPage(),
@@ -206,7 +215,10 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: darkColorScheme,
           textTheme: textTheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: darkColorScheme,
+          fontFamily: 'Times New Roman'),
     );
   }
 }

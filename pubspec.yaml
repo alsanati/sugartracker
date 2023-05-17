@@ -54,6 +54,11 @@ dependencies:
   animated_text_kit: ^4.2.2
   freezed: ^2.3.3
   shared_preferences: ^2.1.1
+  pdf: ^3.10.3
+  printing: ^5.10.4
+  syncfusion_flutter_pdf: ^21.2.5
+  csv: ^5.0.2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
@@ -73,5 +78,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/diabetes_report.md
+    - assets/fonts/times.ttf
+    - assets/fonts/Unna-Medium.ttf
     - assets/.env
 

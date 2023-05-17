@@ -242,11 +242,14 @@ class _ReminderListState extends State<ReminderList> {
 
   @override
   Widget build(BuildContext context) {
+    final labelSmall = Theme.of(context).textTheme.labelSmall;
     return ListView.builder(
       itemCount: _reminders.length,
       itemBuilder: (context, index) {
         final reminder = _reminders[index];
         return Card(
+          elevation: 5,
+          color: Theme.of(context).colorScheme.tertiaryContainer,
           child: ListTile(
             title: Text(reminder.title,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -254,9 +257,14 @@ class _ReminderListState extends State<ReminderList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Divider(),
-                Text("Message: ${reminder.message}"),
-                Text("Time: ${reminder.time.format(context)}"),
-                Text("Recurring: ${reminder.recurring ? "Yes" : "No"}"),
+                Text(
+                  "Message: ${reminder.message}",
+                  style: labelSmall,
+                ),
+                Text("Time: ${reminder.time.format(context)}",
+                    style: labelSmall),
+                Text("Recurring: ${reminder.recurring ? "Yes" : "No"}",
+                    style: labelSmall),
               ],
             ),
             trailing: IconButton(

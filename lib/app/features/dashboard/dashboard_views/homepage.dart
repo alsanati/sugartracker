@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sugar_tracker/app/features/charts/components/charts.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/current_sugar_stats.dart';
-import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_meal_data.dart';
 import '../components/expandable_fab.dart';
 import '../components/get_sugar_data.dart';
@@ -31,11 +30,9 @@ class Homepage extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
               centerTitle: false,
-              title: Text(
-                "Hi, ${user.user} ",
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              title: Text("Hi, ${user.user} ",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontFamily: "Unna-Medium")),
               actions: [
                 IconButton(
                     icon: const FaIcon(FontAwesomeIcons.envelope),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -24,7 +23,7 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
-    final colorPrimary = Theme.of(context).colorScheme.secondaryContainer;
+    final colorPrimary = Theme.of(context).colorScheme.primary;
     final colorSecondary = Theme.of(context).colorScheme.surface;
     final text = Theme.of(context).textTheme.titleSmall;
 
@@ -60,13 +59,15 @@ class _ChartState extends State<Chart> {
                     maximumLabels: widget.days,
                   ),
                   primaryYAxis: NumericAxis(
-                    minimum: 0,
-                    maximum: 300,
-                    interval: 50,
-                    majorGridLines: const MajorGridLines(width: 0),
-                    labelFormat: '{value} mg/dL',
-                  ),
-                  title: ChartTitle(text: widget.titleText, textStyle: text),
+                      minimum: 0,
+                      maximum: 300,
+                      interval: 50,
+                      majorGridLines: const MajorGridLines(width: 0),
+                      labelFormat: '{value} mg/dL',
+                      labelStyle: TextStyle(color: colorSecondary)),
+                  title: ChartTitle(
+                      text: widget.titleText,
+                      textStyle: TextStyle(color: colorSecondary)),
                   tooltipBehavior: TooltipBehavior(enable: true),
                   zoomPanBehavior: ZoomPanBehavior(
                     enablePanning: true,
@@ -100,7 +101,7 @@ class _ChartState extends State<Chart> {
                         borderWidth: 2,
                         height: 2,
                         width: 2,
-                        borderColor: Colors.blue,
+                        borderColor: Colors.black,
                       ),
                     ),
                     // Additional series can be added here...

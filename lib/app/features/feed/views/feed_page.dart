@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/sugar_level_cards.dart';
 import 'package:sugar_tracker/app/models/meals.dart';
 import '../../dashboard/components/expandable_fab.dart';
@@ -14,9 +16,12 @@ class FeedPage extends ConsumerWidget {
       itemCount: feedDataList.length,
       itemBuilder: (context, index) {
         final mealData = feedDataList[index] as Meal;
+        final formattedDate =
+            DateFormat.yMMMMd().format(mealData.createdAt); // Format the date
+// Format the date
 
         return Card(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: Theme.of(context).colorScheme.onInverseSurface,
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -27,7 +32,7 @@ class FeedPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       mealData.mealName,
@@ -37,16 +42,16 @@ class FeedPage extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      "Created at: ${mealData.createdAt}",
+                      formattedDate,
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.grey,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildInfoItem(
                       icon: Icons.fastfood,
@@ -60,14 +65,13 @@ class FeedPage extends ConsumerWidget {
                       icon: Icons.sentiment_dissatisfied,
                       label: "${mealData.fat}g Fat",
                     ),
-                    const Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text("--------")),
-                    _buildInfoItem(
-                      icon: Icons.summarize,
-                      label: "${mealData.calories}",
-                    )
                   ],
+                ),
+                const SizedBox(height: 8),
+                const Divider(), // Add a divider for visual separation
+                _buildInfoItem(
+                  icon: FontAwesomeIcons.calculator,
+                  label: "${mealData.calories}",
                 ),
               ],
             ),
@@ -83,7 +87,6 @@ class FeedPage extends ConsumerWidget {
         Icon(
           icon,
           size: 16,
-          color: Colors.grey,
         ),
         const SizedBox(width: 4),
         Text(
