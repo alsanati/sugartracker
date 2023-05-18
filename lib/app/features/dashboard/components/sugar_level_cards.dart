@@ -14,7 +14,7 @@ class SugarDataListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorSecondary = Theme.of(context).colorScheme.surface;
+    final colorSecondary = Theme.of(context).colorScheme.onSurface;
 
     final todayData = sugarData.where((sugarData) {
       final date = sugarData.createdAt!;
@@ -31,43 +31,79 @@ class SugarDataListView extends StatelessWidget {
         ref.invalidate(sugarStreamProvider);
       },
       child: ListView.builder(
-        itemCount: todayData.length,
-        itemBuilder: (context, index) {
-          final sugarData = todayData[index];
-          final date = sugarData.createdAt!;
-          final formattedDate = DateFormat().add_yMEd().format(date);
-          final sugarLevel = sugarData.sugarLevel;
-          final icon = sugarLevel! < 70
-              ? '😃'
-              : sugarLevel >= 70 && sugarLevel < 180
-                  ? '😊'
-                  : '😞';
-          return Card(
-            color: sugarLevel < 70
-                ? const Color.fromRGBO(0, 184, 169, 1)
-                : sugarLevel >= 70 && sugarLevel < 180
-                    ? const Color.fromRGBO(255, 222, 125, 1)
-                    : const Color.fromRGBO(246, 65, 108, 1),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Text(
-                    formattedDate,
-                    style: TextStyle(
-                        color: colorSecondary, fontWeight: FontWeight.bold),
+          padding: const EdgeInsets.all(16.0),
+          itemCount: todayData.length,
+          itemBuilder: (context, index) {
+            final sugarData = todayData[index];
+            final date = sugarData.createdAt!;
+            final formattedDate = DateFormat().add_yMEd().format(date);
+            final sugarLevel = sugarData.sugarLevel;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                color: sugarData.fasting == true
+                    ? sugarLevel < 100
+                        ? const Color(0xFF81C784) // green
+                        : sugarLevel >= 100 && sugarLevel < 126
+                            ? const Color(0xFFFFB74D) // orange
+                            : const Color(0xFFE57373) // red
+                    : sugarLevel <= 180
+                        ? const Color(0xFF81C784) // green
+                        : const Color(0xFFE57373), // red
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        formattedDate,
+                        style: TextStyle(
+                          color: colorSecondary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Text(
+                            sugarData.fasting == true
+                                ? "Pre-meal:"
+                                : sugarData.fasting == false
+                                    ? "After Meal:"
+                                    : "Unknown",
+                            style:
+                                TextStyle(color: colorSecondary, fontSize: 16),
+                          ),
+                          Text(
+                            ' $sugarLevel mg/dL',
+                            style:
+                                TextStyle(color: colorSecondary, fontSize: 16),
+                          ),
+                          const Spacer(),
+                          Text(
+                            sugarData.fasting == true
+                                ? sugarLevel < 100
+                                    ? '😃'
+                                    : sugarLevel >= 100 && sugarLevel < 126
+                                        ? '😊'
+                                        : '😞'
+                                : sugarLevel <= 180
+                                    ? '😃'
+                                    : '😞',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(' $sugarLevel mg/dL ',
-                      style: TextStyle(color: colorSecondary)),
-                  const Spacer(),
-                  Text(icon)
-                ],
+                ),
               ),
-            ),
-          );
-        },
-      ),
+            );
+          }),
     );
   }
 }

@@ -13,6 +13,10 @@ class SupabaseHelpers {
 
   SupabaseHelpers(this.supabaseClient);
 
+  Future<void> signInWithGoogle() async {
+    await supabase.auth.signInWithOAuth(Provider.google);
+  }
+
   Future<List<SugarData>> getSugarData() async {
     final response = await supabase
         .from('diabetes_sugar')

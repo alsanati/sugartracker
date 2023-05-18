@@ -200,7 +200,7 @@ class ActionButton extends StatelessWidget {
     return Material(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         clipBehavior: Clip.antiAlias,
-        color: theme.colorScheme.secondary,
+        color: theme.colorScheme.primary,
         elevation: 4.0,
         child: InkWell(
           onTap: onPressed,
@@ -209,7 +209,7 @@ class ActionButton extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               label,
-              style: TextStyle(color: theme.colorScheme.onSecondary),
+              style: TextStyle(color: theme.colorScheme.onPrimary),
             ),
           ),
         ));

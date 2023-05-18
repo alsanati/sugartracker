@@ -22,18 +22,18 @@ class GlucoseStats extends StatelessWidget {
   }
 
   Color getCircleColor(double? value) {
-    Color goodLevelColor = const Color(0xFFA0D4AB);
-    Color okayLevelColor = const Color(0xFFFFC482);
-    Color badLevelcolor = Colors.red;
+    Color safeLevelGlucoseColor = Colors.greenAccent;
+    Color okayLevelColor = Colors.orangeAccent;
+    Color alarmingLevelGlucoseColor = Colors.redAccent;
 
     if (value == null) {
       return Colors.black;
-    } else if (value >= 70 && value < 180) {
-      return goodLevelColor;
-    } else if (value < 70 || value >= 180 && value < 300) {
+    } else if (value >= 70 && value < 126) {
+      return safeLevelGlucoseColor;
+    } else if (value < 70 || value >= 126 && value < 180) {
       return okayLevelColor;
     } else {
-      return badLevelcolor;
+      return alarmingLevelGlucoseColor;
     }
   }
 
@@ -86,7 +86,38 @@ class GlucoseStats extends StatelessWidget {
         ),
       );
     } else {
-      return const Text("Add your sugar data!");
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+            height: 150,
+            alignment: Alignment.center,
+            width: 400,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.tertiaryContainer),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Glucose Stats",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      )),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Add your sugar data!",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    )),
+              ],
+            )),
+      );
     }
   }
 

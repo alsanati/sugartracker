@@ -24,7 +24,10 @@ class _AccountPageState extends State<AccountPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Account')),
+      appBar: AppBar(
+        title: const Text('Account'),
+        elevation: 1,
+      ),
       body: FutureBuilder<PatientData>(
         future: supabase.patient.fetchPatientData(),
         builder: (context, snapshot) {
@@ -37,15 +40,14 @@ class _AccountPageState extends State<AccountPage> {
             final textColor = Theme.of(context).textTheme.bodyMedium;
 
             return ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               children: [
                 const SizedBox(height: 20),
                 Card(
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
-                  elevation: 10,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  color: Theme.of(context).colorScheme.surface,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -76,6 +78,9 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 const SizedBox(height: 20),
                 ...items.map((item) => ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       title: Text(item['title'] as String),
                       trailing: const Icon(Icons.navigate_next),
                       onTap: () {
@@ -87,9 +92,15 @@ class _AccountPageState extends State<AccountPage> {
                         );
                       },
                     )),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => supabase.patient.logout(context),
                   child: const Text('Logout'),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
                 ),
               ],
             );

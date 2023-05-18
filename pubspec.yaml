@@ -59,6 +59,7 @@ dependencies:
   syncfusion_flutter_pdf: ^21.2.5
   csv: ^5.0.2
   permission_handler: ^10.2.0
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:

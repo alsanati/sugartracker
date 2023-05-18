@@ -12,89 +12,103 @@ class FeedPage extends ConsumerWidget {
   const FeedPage({Key? key}) : super(key: key);
 
   Widget _buildMealList(BuildContext context, List<dynamic> feedDataList) {
+    // Sort the feedDataList based on mealType
+    feedDataList.sort((a, b) => a.mealType.index.compareTo(b.mealType.index));
+
+    // Initialize a map to keep track of total calories for each meal type
+    Map<MealType, num> totalCalories = {
+      MealType.breakfast: 0,
+      MealType.lunch: 0,
+      MealType.dinner: 0,
+      MealType.snack: 0,
+    };
+
+    // Calculate the total calories for each meal type
+    for (var mealData in feedDataList) {
+      totalCalories[mealData.mealType] =
+          (totalCalories[mealData.mealType] ?? 0) + mealData.calories;
+    }
+
+    // Now you can build the ListView
     return ListView.builder(
+      padding: const EdgeInsets.all(4.0),
       itemCount: feedDataList.length,
       itemBuilder: (context, index) {
         final mealData = feedDataList[index] as Meal;
-        final formattedDate =
-            DateFormat.yMMMMd().format(mealData.createdAt); // Format the date
-// Format the date
 
-        return Card(
-          color: Theme.of(context).colorScheme.onInverseSurface,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      mealData.mealName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+        // Check if the current meal is the first of its type in the list
+        bool isFirstOfType =
+            index == 0 || mealData.mealType != feedDataList[index - 1].mealType;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 1.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // If it's the first meal of its type, display the meal type as a header
+              if (isFirstOfType)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 1.0),
+                  child: Text(
+                      '${mealData.mealType.toString().split('.').last.toUpperCase()} - ${totalCalories[mealData.mealType]} Calories',
+                      style: Theme.of(context).textTheme.titleMedium),
+                ),
+              // Then display the meal card
+              Card(
+                color: Theme.of(context).colorScheme.surface,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(mealData.mealName,
+                              style: Theme.of(context).textTheme.titleSmall),
+                        ],
                       ),
-                    ),
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      Row(
+                        children: [
+                          _buildInfoItem(
+                            context: context,
+                            icon: FontAwesomeIcons.wheatAwn,
+                            label: "${mealData.carbs}g Carbs",
+                          ),
+                          _buildInfoItem(
+                            context: context,
+                            icon: FontAwesomeIcons.cow,
+                            label: " - ${mealData.protein}g Protein",
+                          ),
+                          _buildInfoItem(
+                            context: context,
+                            icon: FontAwesomeIcons.bacon,
+                            label: " - ${mealData.fat}g Fat",
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildInfoItem(
-                      icon: Icons.fastfood,
-                      label: "${mealData.carbs}g Carbs",
-                    ),
-                    _buildInfoItem(
-                      icon: Icons.sentiment_satisfied,
-                      label: "${mealData.protein}g Protein",
-                    ),
-                    _buildInfoItem(
-                      icon: Icons.sentiment_dissatisfied,
-                      label: "${mealData.fat}g Fat",
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                const Divider(), // Add a divider for visual separation
-                _buildInfoItem(
-                  icon: FontAwesomeIcons.calculator,
-                  label: "${mealData.calories}",
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget _buildInfoItem({required IconData icon, required String label}) {
+  Widget _buildInfoItem(
+      {required IconData icon,
+      required String label,
+      required BuildContext context}) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 16,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-          ),
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
@@ -141,39 +155,35 @@ class FeedPage extends ConsumerWidget {
               },
               data: (mealDataList) {
                 return Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      "Your Feed",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
                   body: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: DefaultTabController(
-                        length: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Your Feed",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            const TabBar(
-                              tabs: [
-                                Tab(text: "Sugar Levels"),
-                                Tab(text: "Food Items"),
-                                Tab(text: "Activities"),
+                    child: DefaultTabController(
+                      length: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TabBar(
+                            tabs: [
+                              Tab(text: "Sugar Levels"),
+                              Tab(text: "Food Items"),
+                              Tab(text: "Activities"),
+                            ],
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                SugarDataListView(
+                                    sugarData: sugarDataList, ref: ref),
+                                _buildMealList(context, mealDataList),
                               ],
                             ),
-                            Expanded(
-                              child: TabBarView(
-                                children: [
-                                  SugarDataListView(
-                                      sugarData: sugarDataList, ref: ref),
-                                  _buildMealList(context, mealDataList),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

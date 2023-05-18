@@ -63,71 +63,74 @@ class ExportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Export Data'),
+        title: Text('Export Data'),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
             Card(
-              color: Theme.of(context).colorScheme.tertiaryContainer,
-              elevation: 10,
+              color: Theme.of(context).colorScheme.surface,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 20,
-                    ),
                     Text(
                       'Choose the export format:',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headline6,
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 16),
                     Text(
                       'Export your sugar data in a format of your choice.',
-                      style: TextStyle(fontSize: 16),
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
-                    SizedBox(
-                      height: 20,
-                    )
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 150),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  'Export Sugar Data to PDF',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                onPressed: () => _exportToPdf(context),
               ),
-              child: const Text(
-                'Export Sugar Data to PDF',
-                style: TextStyle(fontSize: 18),
-              ),
-              onPressed: () => _exportToPdf(context),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  'Export Sugar Data to CSV',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                onPressed: () => _exportToCsv(context),
               ),
-              child: const Text(
-                'Export Sugar Data to CSV',
-                style: TextStyle(fontSize: 18),
-              ),
-              onPressed: () => _exportToCsv(context),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
