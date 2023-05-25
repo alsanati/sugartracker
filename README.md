@@ -1,4 +1,4 @@
-# Getting Started with Flutter App
+# Getting Started with Sugartracker
 
 This guide will walk you through the process of setting up and running a Flutter app from a GitHub repository. The app utilizes Supabase, an open-source Firebase alternative, as its backend. Before you begin, you will need to obtain the Supabase URL and anonymous key to connect the app to the backend.
 
