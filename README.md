@@ -20,8 +20,6 @@ Before you start, make sure you have the following installed on your system:
    git clone https://github.com/alsanati/sugartracker.git
    ```
 
-   Replace `username` with the GitHub username and `repository` with the name of the repository you want to clone.
-
 2. Change to the project directory: Once the repository is cloned, navigate into the project directory using the following command:
 
    ```bash
