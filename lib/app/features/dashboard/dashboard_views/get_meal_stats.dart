@@ -40,7 +40,7 @@ class NutritionStats extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             color: Theme.of(context).colorScheme.tertiaryContainer,
           ),
-          height: 150,
+          height: 160,
           width: 400,
           alignment: Alignment.center,
           child: Column(

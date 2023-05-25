@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sugar_tracker/app/features/auth/account_page.dart';
 import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
@@ -209,16 +208,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
-      title: 'Suggra',
-      theme: ThemeData(
+        routerConfig: router,
+        title: 'Suggra',
+        theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkColorScheme,
+            textTheme: textTheme),
+        darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: darkColorScheme,
-          textTheme: textTheme),
-      darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: darkColorScheme,
-          fontFamily: 'Times New Roman'),
-    );
+        ));
   }
 }

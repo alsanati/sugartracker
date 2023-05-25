@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sugar_tracker/app/features/data_export/pdf_service.dart';
+import 'package:sugar_tracker/app/features/target_ranges/target_range_page.dart';
 import 'package:sugar_tracker/app/models/sign_up.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
+import 'package:sugar_tracker/app/utils/list_packages.dart';
 import 'package:sugar_tracker/app/utils/utils.dart';
 
 import '../data_export/pdf_page.dart';
@@ -16,13 +17,15 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  final items = [
+    {'title': 'Reminders', 'child': const ReminderPage()},
+    {'title': 'Data Export', 'child': ExportPage()},
+    {'title': 'Target Ranges', 'child': const SugarLevelTargetPage()},
+    {'title': 'Librarys', 'child': PackageListWidget()},
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final items = [
-      {'title': 'Reminders', 'child': const ReminderPage()},
-      {'title': 'Data Export', 'child': ExportPage()},
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Account'),
@@ -92,22 +95,21 @@ class _AccountPageState extends State<AccountPage> {
                         );
                       },
                     )),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => supabase.patient.logout(context),
-                  child: const Text('Logout'),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
               ],
             );
           } else {
             return const Center(child: Text('No patient data available'));
           }
         },
+      ),
+      floatingActionButton: ElevatedButton(
+        onPressed: () => supabase.patient.logout(context),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: const Text('Logout'),
       ),
     );
   }

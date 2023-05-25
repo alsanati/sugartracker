@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:sugar_tracker/app/features/auth/signup/stepper_page_state.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 
 import 'components/date_picker.dart';
-import 'components/diabetes_picker.dart';
 import 'components/pulsating_button.dart';
 
 class StepperPage extends ConsumerStatefulWidget {
@@ -30,9 +30,8 @@ class _StepperPageState extends ConsumerState<StepperPage> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
-    final secondaryColor = Theme.of(context).colorScheme.secondary;
-    final tertiaryColor = Theme.of(context).colorScheme.tertiary;
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
     final formControllers = ref.watch(formControllersProvider);
     final supabaseHelper = SupabaseHelpers(supabase);
 
@@ -40,8 +39,10 @@ class _StepperPageState extends ConsumerState<StepperPage> {
       appBar: AppBar(
         title: Text(
           'Account information',
-          style: TextStyle(color: primaryColor),
+          style: TextStyle(color: colorScheme.onPrimary),
         ),
+        backgroundColor: colorScheme.primary,
+        elevation: 0,
       ),
       body: Stepper(
         currentStep: _index,
@@ -53,7 +54,8 @@ class _StepperPageState extends ConsumerState<StepperPage> {
           }
         },
         onStepContinue: () {
-          if (_index <= 0) {
+          if (_index < 3 - 1) {
+            // changed this line
             setState(() {
               _index += 1;
             });
@@ -87,8 +89,10 @@ class _StepperPageState extends ConsumerState<StepperPage> {
           Step(
             title: Text(
               'Basic Information',
-              style:
-                  TextStyle(color: secondaryColor, fontWeight: FontWeight.w900),
+              style: textTheme.titleLarge!.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             content: Container(
                 alignment: Alignment.centerLeft,
@@ -97,26 +101,35 @@ class _StepperPageState extends ConsumerState<StepperPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6.0)),
-                              iconColor: tertiaryColor,
-                              hintText: "First name",
-                            ),
+                          child: TextField(
                             controller: formControllers.firstNameController,
+                            decoration: InputDecoration(
+                              labelText: "First name",
+                              floatingLabelBehavior: FloatingLabelBehavior.auto,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6.0)),
-                              iconColor: tertiaryColor,
-                              hintText: "Last name",
-                            ),
+                          child: TextField(
                             controller: formControllers.lastNameController,
+                            decoration: InputDecoration(
+                              fillColor: colorScheme.tertiaryContainer,
+                              labelText: "Last name",
+                              floatingLabelBehavior: FloatingLabelBehavior.auto,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -125,75 +138,137 @@ class _StepperPageState extends ConsumerState<StepperPage> {
                     Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6.0)),
-                                iconColor: tertiaryColor,
-                                prefixIcon: const Icon(Icons.numbers),
-                                hintText: "City code",
+                          child: TextField(
+                            controller: formControllers.cityCodeController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: "City code",
+                              floatingLabelBehavior: FloatingLabelBehavior.auto,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                               ),
-                              keyboardType: TextInputType.number,
-                              controller: formControllers.cityCodeController),
+                              prefixIcon: const Icon(Icons.numbers),
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(6.0)),
-                                iconColor: tertiaryColor,
-                                hintText: "City",
-                                prefixIcon: const Icon(FontAwesomeIcons.city,
-                                    size: 15)),
+                          child: TextField(
                             controller: formControllers.cityController,
+                            decoration: InputDecoration(
+                              labelText: "City",
+                              floatingLabelBehavior: FloatingLabelBehavior.auto,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              prefixIcon:
+                                  const Icon(FontAwesomeIcons.city, size: 15),
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    TextFormField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6.0)),
-                            hintText: "Address",
-                            prefixIcon:
-                                const Icon(FontAwesomeIcons.addressBook)),
-                        controller: formControllers.addressController),
+                    TextField(
+                      controller: formControllers.addressController,
+                      decoration: InputDecoration(
+                        labelText: "Address",
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        prefixIcon: const Icon(FontAwesomeIcons.addressBook),
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     const MyDatePicker()
                   ]),
                 )),
           ),
           Step(
-              title: Text(
-                'Health information',
-                style: TextStyle(
-                    color: secondaryColor, fontWeight: FontWeight.w900),
+            title: Text(
+              'Health information',
+              style: textTheme.titleLarge!.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
               ),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DiabetesTypeSelection(
-                    diabetesTypes: types,
+            ),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: "Diabetes Type",
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "Choose diagnosis date",
+                  items: types
+                      .map((type) =>
+                          DropdownMenuItem(value: type, child: Text(type)))
+                      .toList(),
+                  onChanged: (value) {
+                    // handle change here
+                  },
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Choose diagnosis date",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 24)),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary)),
+                  child: Text(
+                    DateFormat.yMMMd().format(ref.read(
+                        selectedDateProvider)), // assuming this is the selected date
                     style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
+                        color: Theme.of(context).colorScheme.onSecondary),
                   ),
-                  const MyDatePicker(),
-                ],
-              )),
+                  onPressed: () async {
+                    final selectedDate = await showDatePicker(
+                      context: context,
+                      initialDate: ref.read(selectedDateProvider),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+
+                    if (selectedDate != null) {
+                      ref.read(selectedDateProvider.notifier).state =
+                          selectedDate;
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
           Step(
             title: Text(
               'Privacy and Data Protection',
-              style:
-                  TextStyle(color: secondaryColor, fontWeight: FontWeight.w900),
+              style: textTheme.titleLarge!.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

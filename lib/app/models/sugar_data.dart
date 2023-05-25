@@ -27,7 +27,7 @@ class SugarData {
   factory SugarData.fromJson(dynamic json) {
     return SugarData(
       id: json['id'] as int,
-      personId: json['personId'] as String ?? json['patient_id'] as String,
+      personId: json['personId'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       sugarLevel: json['sugar_level'] as int,
     );

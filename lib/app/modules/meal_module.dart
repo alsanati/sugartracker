@@ -44,14 +44,17 @@ class MealRepository {
 
   // Get meals for a user
   Future<List<Meal>> getMeals() async {
-    final response = await supabase.from('meals').select().eq('patientId', 29);
+    final DateTime now = DateTime.now().toUtc();
+    final DateTime today = DateTime(now.year, now.month, now.day);
 
-    if (response == null) {
-      throw Exception('Failed to fetch meals: $response');
-    } else {
-      return (response as List)
-          .map((mealJson) => Meal.fromJson(mealJson))
-          .toList();
-    }
+    final response = await supabase
+        .from('meals')
+        .select()
+        .eq('patientId', await supabase.patient.getCurrentPatientId())
+        .gte('createdAt', today.toIso8601String());
+
+    return (response as List)
+        .map((mealJson) => Meal.fromJson(mealJson))
+        .toList();
   }
 }

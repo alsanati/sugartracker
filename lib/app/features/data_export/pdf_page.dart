@@ -63,7 +63,7 @@ class ExportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Export Data'),
+        title: const Text('Export Data'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -82,18 +82,18 @@ class ExportPage extends StatelessWidget {
                   children: [
                     Text(
                       'Choose the export format:',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       'Export your sugar data in a format of your choice.',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

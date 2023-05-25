@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
 import 'package:sugar_tracker/app/features/dashboard/state/homepage_state.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';

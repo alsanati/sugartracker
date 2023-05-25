@@ -7,6 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sugar_tracker/app/features/charts/components/charts.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/current_sugar_stats.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_meal_data.dart';
+import 'package:sugar_tracker/app/features/dashboard/components/streak_counter.dart';
 import 'package:sugar_tracker/app/features/dashboard/dashboard_views/get_meal_stats.dart';
 import '../components/expandable_fab.dart';
 import '../components/get_sugar_data.dart';
@@ -24,8 +25,11 @@ class Homepage extends ConsumerWidget {
 
     return homepageState.when(
       loading: () => const Center(
-        child:
-            SizedBox(width: 50, height: 50, child: CircularProgressIndicator()),
+        child: SizedBox(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(),
+        ),
       ),
       error: (err, stack) {
         return Scaffold(
@@ -36,36 +40,42 @@ class Homepage extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              "Hi, ${user.user}",
+              "Hi, ${user.user} ",
               textAlign: TextAlign.start,
-              style: const TextStyle(fontFamily: "Unna-Medium"),
             ),
             actions: [
-              IconButton(
-                icon: const FaIcon(FontAwesomeIcons.envelope),
-                onPressed: () {
-                  GoRouter.of(context).go('/reportdialog');
-                },
+              const StreakCounter(),
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.envelope),
+                  onPressed: () {
+                    GoRouter.of(context).go('/reportdialog');
+                  },
+                ),
               ),
             ],
           ),
           body: SafeArea(
             child: Column(
               children: <Widget>[
+                const SizedBox(
+                  height: 20,
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16),
+                  padding: const EdgeInsets.only(left: 14, top: 14),
                   child: Align(
-                    alignment: Alignment.centerLeft,
+                    alignment: Alignment.bottomLeft,
                     child: Text(
-                      "Today",
+                      "Dashboard",
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(left: 14.0, right: 14),
                   child: SizedBox(
-                    height: 180,
+                    height: 200,
                     child: PageView(
                       controller: statsPageController,
                       children: [
@@ -83,13 +93,12 @@ class Homepage extends ConsumerWidget {
                   controller: statsPageController,
                   count: 2,
                   effect: WormEffect(
-                      // Using a different effect to make the UI more lively.
-                      dotColor:
-                          Theme.of(context).colorScheme.onTertiaryContainer,
-                      activeDotColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
-                      dotHeight: 7,
-                      dotWidth: 10),
+                    dotColor: Theme.of(context).colorScheme.onTertiaryContainer,
+                    activeDotColor:
+                        Theme.of(context).colorScheme.tertiaryContainer,
+                    dotHeight: 7,
+                    dotWidth: 10,
+                  ),
                   onDotClicked: (index) {
                     statsPageController.animateToPage(
                       index,
@@ -99,20 +108,14 @@ class Homepage extends ConsumerWidget {
                   },
                 ),
                 const SizedBox(
-                  height: 8,
-                ),
-                const Divider(
-                  indent: 16,
-                  endIndent: 16,
-                ),
-                const SizedBox(
-                  height: 8,
+                  height: 20,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(
+                      left: 28, right: 28, bottom: 28, top: 10),
                   child: Center(
                     child: SizedBox(
-                      height: 280,
+                      height: 250,
                       width: 400,
                       child: PageView(
                         scrollDirection: Axis.horizontal,
@@ -120,50 +123,57 @@ class Homepage extends ConsumerWidget {
                         children: [
                           Center(
                             child: Container(
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .tertiaryContainer,
-                                    borderRadius: BorderRadius.circular(8)),
-                                width: 400,
-                                child: const Chart(
-                                    days: 7, titleText: "Last 7 days")),
-                          ),
-                          Container(
                               decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .tertiaryContainer,
-                                  borderRadius: BorderRadius.circular(8)),
-                              width: 380,
-                              child: const Chart(
-                                  days: 14, titleText: "Last 14 days")),
-                          Container(
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .tertiaryContainer,
-                                  borderRadius: BorderRadius.circular(8)),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .tertiaryContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               width: 400,
                               child: const Chart(
-                                  days: 30, titleText: "Last 30 days")),
+                                  days: 7, titleText: "Last 7 days"),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            width: 380,
+                            child: const Chart(
+                                days: 14, titleText: "Last 14 days"),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            width: 400,
+                            child: const Chart(
+                                days: 30, titleText: "Last 30 days"),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.only(left: 12, right: 12),
                   child: SmoothPageIndicator(
                     controller: chartPageController,
                     count: 3,
                     effect: ExpandingDotsEffect(
-                        dotColor:
-                            Theme.of(context).colorScheme.onTertiaryContainer,
-                        activeDotColor:
-                            Theme.of(context).colorScheme.tertiaryContainer,
-                        dotHeight: 7,
-                        dotWidth: 10),
+                      dotColor:
+                          Theme.of(context).colorScheme.onTertiaryContainer,
+                      activeDotColor:
+                          Theme.of(context).colorScheme.tertiaryContainer,
+                      dotHeight: 7,
+                      dotWidth: 10,
+                    ),
                     onDotClicked: (index) {
                       chartPageController.animateToPage(
                         index,
@@ -188,8 +198,8 @@ class Homepage extends ConsumerWidget {
                       context: context, // Pass the context here
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return const SingleChildScrollView(
-                          child: PostSugarLevelsBottomSheet(),
+                        return SingleChildScrollView(
+                          child: Text("ji"),
                         );
                       },
                     );
@@ -206,8 +216,8 @@ class Homepage extends ConsumerWidget {
                         return SingleChildScrollView(
                           child: Container(
                             padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
                             child: const MealBottomSheet(),
                           ),
                         );
@@ -226,8 +236,8 @@ class Homepage extends ConsumerWidget {
                         return SingleChildScrollView(
                           child: Container(
                             padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ),
                             child: const PostSugarLevelsBottomSheet(),
                           ),
                         );

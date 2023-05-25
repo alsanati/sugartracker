@@ -188,6 +188,8 @@ class _MealBottomSheetState extends State<MealBottomSheet> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
+                          fillColor:
+                              Theme.of(context).colorScheme.tertiaryContainer,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           labelText: 'Meal Name',

@@ -38,18 +38,27 @@ class _MyDatePickerState extends State<MyDatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-      return TextFormField(
-          readOnly: true,
-          decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.calendar_today),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(6.0))),
-          onTap: () {
-            _selectDate(ref);
-          },
-          controller: _dateController);
+      return TextField(
+        readOnly: true,
+        controller: _dateController,
+        onTap: () {
+          _selectDate(ref);
+        },
+        decoration: InputDecoration(
+          labelText: "Select Date",
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: BorderSide(
+              color: colorScheme.primary,
+            ),
+          ),
+          prefixIcon: const Icon(Icons.calendar_today),
+        ),
+      );
     });
   }
 }

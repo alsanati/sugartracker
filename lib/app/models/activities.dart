@@ -1,12 +1,19 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Activities {
-  final String activityType;
-  final num duration;
-  final String intensity;
+part 'activities.freezed.dart';
+part 'activities.g.dart';
 
-  Activities({
-    required this.activityType,
-    required this.duration,
-    required this.intensity,
-  });
+@freezed
+class Activities with _$Activities {
+  factory Activities(
+      {required String id,
+      required num patient_id,
+      required String created_at,
+      required String activity_type,
+      required int duration,
+      required String intensity,
+      required String notes}) = _Activities;
+
+  factory Activities.fromJson(Map<String, dynamic> json) =>
+      _$ActivitiesFromJson(json);
 }

@@ -30,17 +30,16 @@ class SugarDataListView extends StatelessWidget {
         ref.invalidate(mealStreamProvider);
         ref.invalidate(sugarStreamProvider);
       },
-      child: ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: todayData.length,
-          itemBuilder: (context, index) {
-            final sugarData = todayData[index];
-            final date = sugarData.createdAt!;
-            final formattedDate = DateFormat().add_yMEd().format(date);
-            final sugarLevel = sugarData.sugarLevel;
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Card(
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: ListView.builder(
+            itemCount: todayData.length,
+            itemBuilder: (context, index) {
+              final sugarData = todayData[index];
+              final date = sugarData.createdAt!;
+              final formattedDate = DateFormat().add_yMEd().format(date);
+              final sugarLevel = sugarData.sugarLevel;
+              return Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -54,7 +53,8 @@ class SugarDataListView extends StatelessWidget {
                         ? const Color(0xFF81C784) // green
                         : const Color(0xFFE57373), // red
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 4, bottom: 4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,9 +101,9 @@ class SugarDataListView extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 }

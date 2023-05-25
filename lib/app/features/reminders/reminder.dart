@@ -120,7 +120,7 @@ class _ReminderFormState extends State<ReminderForm> {
               children: [
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Title',
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(12),
@@ -132,10 +132,10 @@ class _ReminderFormState extends State<ReminderForm> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   controller: _messageController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Message',
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.all(12),
@@ -147,11 +147,11 @@ class _ReminderFormState extends State<ReminderForm> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Time:', style: TextStyle(fontSize: 16)),
+                    const Text('Time:', style: TextStyle(fontSize: 16)),
                     TextButton(
                       onPressed: () async {
                         final TimeOfDay? selectedTime = await showTimePicker(
@@ -166,7 +166,7 @@ class _ReminderFormState extends State<ReminderForm> {
                       },
                       child: Text(
                         _selectedTime.format(context),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
@@ -174,7 +174,7 @@ class _ReminderFormState extends State<ReminderForm> {
                     ),
                     Row(
                       children: [
-                        Text('Recurring', style: TextStyle(fontSize: 16)),
+                        const Text('Recurring', style: TextStyle(fontSize: 16)),
                         Checkbox(
                           value: _isRecurring,
                           onChanged: (value) {
@@ -187,12 +187,12 @@ class _ReminderFormState extends State<ReminderForm> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _saveReminder,
-                  child: Padding(
+                  child: const Padding(
                     padding: EdgeInsets.all(12),
-                    child: const Text('Save Reminder',
+                    child: Text('Save Reminder',
                         style: TextStyle(fontSize: 16)),
                   ),
                 ),
@@ -251,29 +251,29 @@ class _ReminderListState extends State<ReminderList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       itemCount: _reminders.length,
       itemBuilder: (context, index) {
         final reminder = _reminders[index];
         return Card(
-          margin: EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: 16),
           color: Theme.of(context).colorScheme.surface,
           child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             title: Text(reminder.title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text("Message: ${reminder.message}",
-                    style: TextStyle(fontSize: 16)),
-                SizedBox(height: 4),
+                    style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 4),
                 Text("Time: ${reminder.time.format(context)}",
-                    style: TextStyle(fontSize: 16)),
-                SizedBox(height: 4),
+                    style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 4),
                 Text("Recurring: ${reminder.recurring ? "Yes" : "No"}",
-                    style: TextStyle(fontSize: 16)),
+                    style: const TextStyle(fontSize: 16)),
               ],
             ),
             trailing: IconButton(

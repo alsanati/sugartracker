@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sugar_tracker/app/models/activities.dart';
 import 'package:sugar_tracker/app/models/meals.dart';
 import 'package:sugar_tracker/app/modules/meal_module.dart';
 
@@ -90,6 +91,24 @@ final sugarStreamProvider = StreamProvider.autoDispose<List<SugarData>>((ref) {
     // Fetch mealList from another provider or method
     return sugarDataList;
   });
+});
+
+Future<List<Activities>> getActivities() async {
+  final response =
+      await supabase.from('activity').select().eq('patient_id', 29);
+
+  if (response == null) {
+    throw Exception('Failed to fetch meals: $response');
+  } else {
+    return (response as List)
+        .map((mealJson) => Activities.fromJson(mealJson))
+        .toList();
+  }
+}
+
+final activityStreamProvider =
+    StreamProvider.autoDispose<List<Activities>>((ref) async* {
+  yield await getActivities();
 });
 
 final mealStreamProvider = StreamProvider.autoDispose<List<Meal>>((ref) async* {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sugar_tracker/app/models/activities.dart';
 import 'package:sugar_tracker/app/utils/utils.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -228,5 +229,27 @@ class SupabaseHelpers {
         'use': "home"
       }
     ]);
+  }
+
+  Future<void> addActivity(
+      Activities newActivity, BuildContext context, String notes) async {
+    // Retrieve patient id if available in the context
+
+    // Now we insert the new activity
+    await supabase.from('acitivity').insert({
+      'patient_id': await supabase.patient.getCurrentPatientId(),
+      'activity_type': newActivity.activity_type,
+      'duration': newActivity.duration,
+      'intensity': newActivity.intensity,
+      'notes': notes,
+    });
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        showCloseIcon: true,
+        content: Text("Registration successful"),
+        backgroundColor: Colors.greenAccent,
+      ));
+    }
   }
 }

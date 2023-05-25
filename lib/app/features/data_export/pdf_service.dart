@@ -75,10 +75,10 @@ class PdfGenerator {
 
     // Add patient data as text
     double currentY = 100;
-    String firstName = patientData.firstName ?? '';
-    String lastName = patientData.lastName ?? '';
-    String birthday = patientData.birthday ?? '';
-    String accountId = patientData.accountId?.toString() ?? '';
+    String firstName = patientData.firstName;
+    String lastName = patientData.lastName;
+    String birthday = patientData.birthday;
+    String accountId = patientData.accountId.toString();
 
     PdfTextElement patientText = PdfTextElement(
       text: 'Patient Information',
