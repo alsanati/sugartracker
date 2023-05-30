@@ -28,8 +28,13 @@ class OpenAiApi {
     String encodedData = jsonEncode(sugarDataList);
     String encodedMeals = jsonEncode(mealDataList);
     String prompt = '''
-Please write a short and witty daily report in markdown for diabetes app users, targeted at users who want to understand their daily blood sugar readings better. Analyze their blood sugar levels and meals to give report. Additionally, include actionable tips for users to make necessary adjustments in their lifestyle and diet to manage their diabetes effectively. Use the following daily blood sugar readings as context: $encodedData $encodedMeals.  your response like this:
+"Please generate a concise and engaging daily report in markdown format for users of our diabetes app. The report should help users better understand their daily blood sugar readings and meal intake. Use the following daily blood sugar readings and meal data as context: $encodedData $encodedMeals.
 
+The report should include:
+
+A brief analysis of the user's blood sugar levels throughout the day, highlighting any significant fluctuations or patterns.
+An overview of the user's meals, focusing on their nutritional content and how they might have affected the user's blood sugar levels.
+Practical and personalized tips to help the user manage their diabetes more effectively. This could include suggestions for dietary changes, lifestyle modifications, or strategies for maintaining stable blood sugar levels.
 
 ## Daily Report: {get date from data i provided you}
 

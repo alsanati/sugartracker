@@ -18,7 +18,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _supabaseAuth = SupabaseHelpers(supabase);
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void dispose() {
@@ -93,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             const Text(
-                              'Password must contain uppercase letters and be at least 12 characters',
+                              'Password must contain uppercase letters and must be at least 12 characters long.',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
