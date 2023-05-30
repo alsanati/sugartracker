@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sugar_tracker/app/models/sugar_data.dart';
 
-class GlucoseStats extends StatelessWidget {
+class GlucoseStats extends StatefulWidget {
   final List<SugarData> sugardata;
+
   const GlucoseStats({Key? key, required this.sugardata}) : super(key: key);
+
+  @override
+  _GlucoseStatsState createState() => _GlucoseStatsState();
+}
+
+class _GlucoseStatsState extends State<GlucoseStats> {
+  late Future<SharedPreferences> _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    _prefs = SharedPreferences.getInstance();
+  }
 
   double calculateChangeInAverage(
       List<SugarData> todayData, List<SugarData> yesterdayData) {
@@ -21,77 +36,177 @@ class GlucoseStats extends StatelessWidget {
     return todayAverage - yesterdayAverage;
   }
 
-  Color getCircleColor(double? value) {
-    Color goodLevelColor = const Color(0xFFA0D4AB);
-    Color okayLevelColor = const Color(0xFFFFC482);
-    Color badLevelcolor = Colors.red;
+  Color getCircleColor(double value, double minTarget, double maxTarget) {
+    Color safeLevelGlucoseColor = Colors.greenAccent;
+    Color okayLevelColor = Colors.orangeAccent;
+    Color alarmingLevelGlucoseColor = Colors.redAccent;
 
-    if (value == null) {
-      return Colors.black;
-    } else if (value >= 70 && value < 180) {
-      return goodLevelColor;
-    } else if (value < 70 || value >= 180 && value < 300) {
-      return okayLevelColor;
+    if (value >= minTarget && value < maxTarget) {
+      return safeLevelGlucoseColor;
+    } else if (value < minTarget || value >= maxTarget) {
+      return alarmingLevelGlucoseColor;
     } else {
-      return badLevelcolor;
+      return Colors.black;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    int? minGlucose;
-    int? maxGlucose;
-    double averageGlucose = 0;
+    return FutureBuilder<SharedPreferences>(
+      future: _prefs,
+      builder:
+          (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          final SharedPreferences prefs = snapshot.data!;
+          double minTarget = (prefs.getDouble('minTarget') ?? 80).toDouble();
+          double maxTarget = (prefs.getDouble('maxTarget') ?? 180).toDouble();
+          double avgTarget = (prefs.getDouble('avgTarget') ?? 110).toDouble();
 
-    DateTime today = DateTime.now();
-    DateTime yesterday = today.subtract(const Duration(days: 1));
+          int? minGlucose;
+          int? maxGlucose;
+          double averageGlucose = 0;
 
-    List<SugarData> todayData =
-        SugarData.getEntriesForGivenDay(sugardata, today);
-    List<SugarData> yesterdayData =
-        SugarData.getEntriesForGivenDay(sugardata, yesterday);
+          DateTime today = DateTime.now();
+          DateTime yesterday = today.subtract(const Duration(days: 1));
 
-    if (todayData.isNotEmpty) {
-      minGlucose =
-          todayData.map((e) => e.sugarLevel!).reduce((a, b) => a < b ? a : b);
-      maxGlucose =
-          todayData.map((e) => e.sugarLevel!).reduce((a, b) => a > b ? a : b);
-      averageGlucose =
-          todayData.map((e) => e.sugarLevel!).reduce((a, b) => a + b) /
-              todayData.length;
+          List<SugarData> todayData =
+              SugarData.getEntriesForGivenDay(widget.sugardata, today);
+          List<SugarData> yesterdayData =
+              SugarData.getEntriesForGivenDay(widget.sugardata, yesterday);
 
-      String changeInAverage =
-          calculateChangeInAverage(todayData, yesterdayData).toString();
-      TextStyle changeTextStyle = TextStyle(
-        color: changeInAverage.startsWith('↑') ? Colors.red : Colors.green,
-      );
-      return Center(
-        child: Container(
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildCircleStat(context, 'Min.', minGlucose, changeInAverage,
-                  changeTextStyle),
-              buildCircleStat(
-                  context,
-                  'Avg.',
-                  averageGlucose.toStringAsFixed(0),
-                  changeInAverage,
-                  changeTextStyle),
-              buildCircleStat(context, 'Max.', maxGlucose, changeInAverage,
-                  changeTextStyle),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return const Text("Add your sugar data!");
-    }
+          if (todayData.isNotEmpty) {
+            minGlucose = todayData
+                .map((e) => e.sugarLevel!)
+                .reduce((a, b) => a < b ? a : b);
+            maxGlucose = todayData
+                .map((e) => e.sugarLevel!)
+                .reduce((a, b) => a > b ? a : b);
+            averageGlucose =
+                todayData.map((e) => e.sugarLevel!).reduce((a, b) => a + b) /
+                    todayData.length;
+
+            String changeInAverage =
+                calculateChangeInAverage(todayData, yesterdayData).toString();
+            TextStyle changeTextStyle = TextStyle(
+              color:
+                  changeInAverage.startsWith('↑') ? Colors.red : Colors.green,
+            );
+
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                  ),
+                  height: 160,
+                  width: 400,
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text("Glucose Stats",
+                                style:
+                                    Theme.of(context).textTheme.titleMedium)),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: buildCircleStat(
+                                context,
+                                'Min.',
+                                minGlucose,
+                                changeInAverage,
+                                changeTextStyle,
+                                minTarget,
+                                maxTarget,
+                                avgTarget),
+                          ),
+                          Center(
+                            child: buildCircleStat(
+                                context,
+                                'Avg.',
+                                averageGlucose.toStringAsFixed(0),
+                                changeInAverage,
+                                changeTextStyle,
+                                minTarget,
+                                maxTarget,
+                                avgTarget),
+                          ),
+                          Center(
+                            child: buildCircleStat(
+                                context,
+                                'Max.',
+                                maxGlucose,
+                                changeInAverage,
+                                changeTextStyle,
+                                minTarget,
+                                maxTarget,
+                                avgTarget),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                  height: 150,
+                  alignment: Alignment.center,
+                  width: 400,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Theme.of(context).colorScheme.tertiaryContainer),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "Glucose Stats",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Add your sugar data!",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          )),
+                    ],
+                  )),
+            );
+          }
+        }
+      },
+    );
   }
 
-  Padding buildCircleStat(BuildContext context, String title, dynamic value,
-      String changeInAverage, TextStyle changeTextStyle) {
+  Padding buildCircleStat(
+    BuildContext context,
+    String title,
+    dynamic value,
+    String changeInAverage,
+    TextStyle changeTextStyle,
+    double minTarget,
+    double maxTarget,
+    double avgTarget,
+  ) {
     double? doubleValue;
     if (value != null) {
       if (value is int) {
@@ -106,40 +221,45 @@ class GlucoseStats extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 80,
-        height: 80,
-        decoration: BoxDecoration(
-          color: doubleValue != null
-              ? getCircleColor(doubleValue)
-              : Theme.of(context).colorScheme.surface,
-          shape: BoxShape.circle,
-        ),
-        alignment: Alignment.center,
+        color: Theme.of(context).colorScheme.tertiaryContainer,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               title,
-              style:
-                  TextStyle(color: Theme.of(context).colorScheme.onBackground),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title == 'Avg.' && doubleValue != null
-                      ? doubleValue.toString()
-                      : value.toString(),
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground),
+            const SizedBox(height: 10),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black, width: 2),
                 ),
-                if (title == 'Avg.')
-                  Text(
-                    changeInAverage,
-                    style: changeTextStyle,
+                height: 50,
+                width: 50,
+                child: Center(
+                  child: Text(
+                    value.toString(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                      fontSize: 16,
+                    ),
                   ),
-              ],
+                ),
+              ),
             ),
+            if (title == 'Min.')
+              Text("/$minTarget",
+                  style: Theme.of(context).textTheme.labelMedium),
+            if (title == 'Max.')
+              Text("/$maxTarget",
+                  style: Theme.of(context).textTheme.labelMedium),
+            if (title == 'Avg.')
+              Text("/$avgTarget",
+                  style: Theme.of(context).textTheme.labelMedium),
           ],
         ),
       ),

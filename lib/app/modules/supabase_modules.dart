@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sugar_tracker/app/models/activities.dart';
 import 'package:sugar_tracker/app/utils/utils.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../models/sign_up.dart';
 import '../models/sugar_data.dart';
 
 class SupabaseHelpers {
@@ -11,13 +14,19 @@ class SupabaseHelpers {
 
   SupabaseHelpers(this.supabaseClient);
 
-  Future getSugarData() async {
+  Future<void> signInWithGoogle() async {
+    await supabase.auth.signInWithOAuth(Provider.google);
+  }
+
+  Future<List<SugarData>> getSugarData() async {
     final response = await supabase
         .from('diabetes_sugar')
         .select()
         .eq('personId', supabase.auth.currentUser!.id)
         .order('created_at', ascending: false);
-    return response;
+
+    List<SugarData> sugarLevels = SugarData.getListMap(response);
+    return sugarLevels;
   }
 
   Future<void> upload(
@@ -90,7 +99,7 @@ class SupabaseHelpers {
             content: Text("Registration successful"),
             backgroundColor: Colors.green,
           ));
-          context.go(NavigationHelper.stepperPage);
+          GoRouter.of(context).go("/stepper");
         }
       }
     } on AuthException catch (error) {
@@ -144,9 +153,33 @@ class SupabaseHelpers {
     }
   }
 
+  Future<PatientData> fetchPatientData() async {
+    final patientId = await getCurrentPatientId();
+    final response =
+        await supabase.from('patient').select().eq('id', patientId).single();
+    if (response != null) {
+      Map<String, dynamic> patientDataMap = response as Map<String, dynamic>;
+      return PatientData(
+        firstName: patientDataMap['first_name'] ?? '',
+        lastName: patientDataMap['last_name'] ?? '',
+        birthday: patientDataMap['birthday'] ?? '',
+        accountId: patientDataMap['account_id'] ?? 0,
+      );
+    } else {
+      debugPrint('Error fetching patient data: ${response.error}');
+    }
+
+    return PatientData(
+      firstName: '',
+      lastName: '',
+      birthday: '',
+      accountId: 0,
+    );
+  }
+
   Future<void> logout(context) async {
     await supabase.auth.signOut();
-    Navigator.pushReplacementNamed(context, "login");
+    GoRouter.of(context).go("/login");
   }
 
   Future<void> insertPatientData(
@@ -196,5 +229,27 @@ class SupabaseHelpers {
         'use': "home"
       }
     ]);
+  }
+
+  Future<void> addActivity(
+      Activities newActivity, BuildContext context, String notes) async {
+    // Retrieve patient id if available in the context
+
+    // Now we insert the new activity
+    await supabase.from('acitivity').insert({
+      'patient_id': await supabase.patient.getCurrentPatientId(),
+      'activity_type': newActivity.activity_type,
+      'duration': newActivity.duration,
+      'intensity': newActivity.intensity,
+      'notes': notes,
+    });
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        showCloseIcon: true,
+        content: Text("Registration successful"),
+        backgroundColor: Colors.greenAccent,
+      ));
+    }
   }
 }

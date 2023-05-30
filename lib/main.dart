@@ -3,10 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sugar_tracker/app/features/auth/account_page.dart';
 import 'package:sugar_tracker/app/features/components/bottom_nav.dart';
+import 'package:sugar_tracker/app/features/dashboard/components/diabetes_report.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/get_sugar_data.dart';
 import 'package:sugar_tracker/app/features/feed/views/feed_page.dart';
 import 'package:sugar_tracker/app/features/reminders/reminder_page.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
 
 import 'package:sugar_tracker/text_theme.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -71,7 +74,29 @@ final router = GoRouter(
             },
           ),
           GoRoute(
+            path: '/reportdialog',
+            pageBuilder: (context, state) {
+              return const MaterialPage(child: ConfirmationPage());
+            },
+            routes: [
+              GoRoute(
+                path: 'diabetesreport',
+                parentNavigatorKey: _rootNavigatorKey,
+                pageBuilder: (context, state) {
+                  return const MaterialPage(child: MyMarkDownWidget());
+                },
+              ),
+            ],
+          ),
+          GoRoute(
               path: '/account',
+              pageBuilder: (context, state) {
+                return const MaterialPage(
+                  child: AccountPage(),
+                );
+              }),
+          GoRoute(
+              path: '/reminders',
               pageBuilder: (context, state) {
                 return const MaterialPage(
                   child: ReminderPage(),
@@ -183,13 +208,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
-      title: 'Suggra',
-      theme: ThemeData(
+        routerConfig: router,
+        title: 'Suggra',
+        theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkColorScheme,
+            textTheme: textTheme),
+        darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: darkColorScheme,
-          textTheme: textTheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-    );
+        ));
   }
 }

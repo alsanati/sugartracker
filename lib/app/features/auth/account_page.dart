@@ -1,186 +1,115 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sugar_tracker/app/features/target_ranges/target_range_page.dart';
+import 'package:sugar_tracker/app/models/sign_up.dart';
 import 'package:sugar_tracker/app/utils/constants.dart';
+import 'package:sugar_tracker/app/utils/list_packages.dart';
+import 'package:sugar_tracker/app/utils/utils.dart';
 
-import '../components/avatar.dart';
+import '../data_export/pdf_page.dart';
+import '../reminders/reminder_page.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  _AccountPageState createState() => _AccountPageState();
 }
 
 class _AccountPageState extends State<AccountPage> {
-  final _usernameController = TextEditingController();
-  final _websiteController = TextEditingController();
-  String? _avatarUrl;
-  var _loading = false;
-
-  /// Called once a user id is received within `onAuthenticated()`
-  Future<void> _getProfile() async {
-    setState(() {
-      _loading = true;
-    });
-
-    try {
-      final userId = supabase.auth.currentUser!.id;
-      final data = await supabase
-          .from('profiles')
-          .select()
-          .eq('id', userId)
-          .single() as Map;
-      _usernameController.text = (data['username'] ?? '') as String;
-      _websiteController.text = (data['website'] ?? '') as String;
-      _avatarUrl = (data['avatar_url'] ?? '') as String;
-    } on PostgrestException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected exception occurred');
-    }
-
-    setState(() {
-      _loading = false;
-    });
-  }
-
-  /// Called when user taps `Update` button
-  Future<void> _updateProfile() async {
-    setState(() {
-      _loading = true;
-    });
-    final userName = _usernameController.text;
-    final website = _websiteController.text;
-    final user = supabase.auth.currentUser;
-    final updates = {
-      'id': user!.id,
-      'username': userName,
-      'website': website,
-      'updated_at': DateTime.now().toIso8601String(),
-    };
-    try {
-      await supabase.from('profiles').upsert(updates);
-      if (mounted) {
-        context.showSnackBar(message: 'Successfully updated profile!');
-      }
-    } on PostgrestException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpeted error occurred');
-    }
-    setState(() {
-      _loading = false;
-    });
-  }
-
-  Future<void> _signOut() async {
-    try {
-      await supabase.auth.signOut();
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error occurred');
-    }
-    if (mounted) {
-      context.go('/login');
-    }
-  }
-
-  /// Called when image has been uploaded to Supabase storage from within Avatar widget
-  Future<void> _onUpload(String imageUrl) async {
-    try {
-      final userId = supabase.auth.currentUser!.id;
-      await supabase.from('profiles').upsert({
-        'id': userId,
-        'avatar_url': imageUrl,
-      });
-      if (mounted) {
-        context.showSnackBar(message: 'Updated your profile image!');
-      }
-    } on PostgrestException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: 'Unexpected error has occurred');
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _avatarUrl = imageUrl;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getProfile();
-  }
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _websiteController.dispose();
-    super.dispose();
-  }
+  final items = [
+    {'title': 'Reminders', 'child': const ReminderPage()},
+    {'title': 'Data Export', 'child': ExportPage()},
+    {'title': 'Target Ranges', 'child': const SugarLevelTargetPage()},
+    {'title': 'Librarys', 'child': PackageListWidget()},
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).copyWith(
-        useMaterial3:
-            true); // Opt-in to Material 3 [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-        children: [
-          Avatar(
-            imageUrl: _avatarUrl,
-            onUpload: _onUpload,
+      appBar: AppBar(
+        title: const Text('Account'),
+        elevation: 1,
+      ),
+      body: FutureBuilder<PatientData>(
+        future: supabase.patient.fetchPatientData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final patientData = snapshot.data!;
+            final textColor = Theme.of(context).textTheme.bodyMedium;
+
+            return ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                const SizedBox(height: 20),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Theme.of(context).colorScheme.surface,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        ListTile(
+                          title: Text(
+                            'First Name',
+                            style: textColor,
+                          ),
+                          subtitle: Text(patientData.firstName),
+                          leading: const FaIcon(FontAwesomeIcons.faceGrin),
+                        ),
+                        ListTile(
+                          title: Text('Last Name', style: textColor),
+                          subtitle: Text(patientData.lastName),
+                          leading: const FaIcon(FontAwesomeIcons.faceGrin),
+                        ),
+                        ListTile(
+                          title: Text('Birthday', style: textColor),
+                          subtitle: Text(patientData.birthday),
+                          leading: const FaIcon(FontAwesomeIcons.cakeCandles),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ...items.map((item) => ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      title: Text(item['title'] as String),
+                      trailing: const Icon(Icons.navigate_next),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => item['child'] as Widget,
+                          ),
+                        );
+                      },
+                    )),
+              ],
+            );
+          } else {
+            return const Center(child: Text('No patient data available'));
+          }
+        },
+      ),
+      floatingActionButton: ElevatedButton(
+        onPressed: () => supabase.patient.logout(context),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _usernameController,
-            decoration: InputDecoration(
-              labelText: 'User Name',
-              labelStyle: theme.textTheme
-                  .titleMedium, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-            ),
-          ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _websiteController,
-            decoration: InputDecoration(
-              labelText: 'Website',
-              labelStyle: theme.textTheme
-                  .titleMedium, // Apply Material 3 typography [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-            ),
-          ),
-          const SizedBox(height: 18),
-          ElevatedButton(
-            onPressed: _updateProfile,
-            style: ElevatedButton.styleFrom(
-              foregroundColor: theme.colorScheme.onPrimary,
-              backgroundColor: theme.colorScheme
-                  .primary, // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-              elevation:
-                  4, // Apply Material 3 elevation support [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-            ),
-            child: Text(_loading ? 'Saving...' : 'Update'),
-          ),
-          const SizedBox(height: 18),
-          TextButton(
-            onPressed: _signOut,
-            style: TextButton.styleFrom(
-              foregroundColor: theme.colorScheme.primary,
-              disabledForegroundColor: theme.colorScheme.onSurface.withOpacity(
-                  0.38), // Apply Material 3 color system [docs.flutter.dev](https://docs.flutter.dev/ui/material)
-            ),
-            child: const Text('Sign Out'),
-          ),
-        ],
+        ),
+        child: const Text('Logout'),
       ),
     );
   }

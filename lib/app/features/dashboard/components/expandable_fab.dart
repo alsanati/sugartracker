@@ -78,29 +78,10 @@ class _ExpandableFabState extends State<ExpandableFab>
         opacity: _open ? 1.0 : 0.0,
         curve: const Interval(0.0, 0.25, curve: Curves.easeInOut),
         duration: const Duration(milliseconds: 250),
-        child: SizedBox(
-          width: 54.0,
-          height: 54.0,
-          child: Center(
-            child: Material(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              clipBehavior: Clip.antiAlias,
-              elevation: 4.0,
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: InkWell(
-                onTap: _toggle,
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+        child: FloatingActionButton(
+          onPressed: _toggle,
+          backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+          child: const Icon(Icons.close, color: Colors.white),
         ),
       ),
     );
@@ -197,21 +178,20 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        clipBehavior: Clip.antiAlias,
-        color: theme.colorScheme.secondary,
-        elevation: 4.0,
-        child: InkWell(
-          onTap: onPressed,
-          child: Container(
+    return OutlinedButton(
+        onPressed: onPressed,
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30))),
+            backgroundColor:
+                MaterialStateProperty.all(theme.colorScheme.tertiary)),
+        child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               label,
-              style: TextStyle(color: theme.colorScheme.onSecondary),
-            ),
-          ),
-        ));
+              style: TextStyle(color: theme.colorScheme.onTertiary),
+            )));
   }
 }

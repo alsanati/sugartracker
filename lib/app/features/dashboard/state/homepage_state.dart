@@ -8,6 +8,7 @@ import '../../../modules/supabase_modules.dart';
 import '../../../utils/opan_ai_config.dart';
 
 final supabaseHelper = SupabaseHelpers(supabase);
+final meals = MealRepository(supabase);
 
 final openAiConfig = OpenAiConfig.withApiKey();
 final openAI = OpenAiApi(apiKey: openAiConfig.apiKey ?? '');
@@ -17,22 +18,22 @@ final diabetesDataProvider = FutureProvider<List<SugarData>>((ref) async {
 });
 
 final reportProvider = FutureProvider<String>((ref) async {
-  MealRepository meal = MealRepository(supabase);
   final diabetesData = await ref.watch(diabetesDataProvider.future);
-  final mealData = await meal.getMeals();
+  final mealData = await meals.getMeals();
   final report = await openAI.fetchOpenAIResponse(diabetesData, mealData);
   return report;
 });
 
 final homePageProvider = FutureProvider<HomepageState>((ref) async {
   var currentUser = await supabaseHelper.getCurrentUser();
+  final mealData = await meals.getMeals();
+
   final sugarData = await getSugarStats();
-  return HomepageState(user: currentUser, sugarData: sugarData);
+  return HomepageState(
+      user: currentUser, sugarData: sugarData, meals: mealData);
 });
 
 Future<List<SugarData>> getSugarStats() async {
-  // Here you would fetch the sugar data from your data source
-  // and return a List<SugarData>.
   final response = await supabase
       .from('diabetes_sugar')
       .select()

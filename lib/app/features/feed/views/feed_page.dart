@@ -1,258 +1,237 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sugar_tracker/app/features/dashboard/components/sugar_level_cards.dart';
 import 'package:sugar_tracker/app/models/meals.dart';
+import 'package:sugar_tracker/app/utils/error_screen.dart';
+import '../../../models/activities.dart';
 import '../../dashboard/components/expandable_fab.dart';
-import '../../dashboard/components/get_sugar_data.dart';
 import '../state/feed_page_state.dart';
 
 class FeedPage extends ConsumerWidget {
   const FeedPage({Key? key}) : super(key: key);
 
-  Widget _buildMealList(BuildContext context, List<dynamic> feedDataList) {
-    return ListView.builder(
-      itemCount: feedDataList.length,
-      itemBuilder: (context, index) {
-        final mealData = feedDataList[index] as Meal;
-
-        return Card(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      mealData.mealName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      "Created at: ${mealData.createdAt}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Column(
-                  children: [
-                    _buildInfoItem(
-                      icon: Icons.fastfood,
-                      label: "${mealData.carbs}g Carbs",
-                    ),
-                    _buildInfoItem(
-                      icon: Icons.sentiment_satisfied,
-                      label: "${mealData.protein}g Protein",
-                    ),
-                    _buildInfoItem(
-                      icon: Icons.sentiment_dissatisfied,
-                      label: "${mealData.fat}g Fat",
-                    ),
-                    const Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text("--------")),
-                    _buildInfoItem(
-                      icon: Icons.summarize,
-                      label: "${mealData.calories}",
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildInfoItem({required IconData icon, required String label}) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: Colors.grey,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mealData = ref.watch(mealStreamProvider);
     final sugarData = ref.watch(sugarStreamProvider);
+    final activityData = ref.watch(activityStreamProvider);
+
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Builder(
       builder: (context) {
-        final sugarDataState = sugarData.when(
-          loading: () => const AsyncLoading<List<dynamic>>(),
-          error: (err, stack) => AsyncError<List<dynamic>>(err, stack),
-          data: (data) => AsyncData<List<dynamic>>(data),
-        );
-
-        final mealDataState = mealData.when(
-          loading: () => const AsyncLoading<List<dynamic>>(),
-          error: (err, stack) => AsyncError<List<dynamic>>(err, stack),
-          data: (data) => AsyncData<List<dynamic>>(data),
-        );
-
-        return sugarDataState.when(
+        return sugarData.when(
           loading: () => const Center(
-            child: SizedBox(
-                width: 50, height: 50, child: CircularProgressIndicator()),
+            child: CircularProgressIndicator(),
           ),
           error: (err, stack) {
-            return Scaffold(
-              body: Center(child: Text('$err')),
+            return CuteErrorScreen(
+              error: err.toString(),
             );
           },
           data: (sugarDataList) {
-            return mealDataState.when(
+            return mealData.when(
               loading: () => const Center(
-                child: SizedBox(
-                    width: 50, height: 50, child: CircularProgressIndicator()),
+                child: CircularProgressIndicator(),
               ),
               error: (err, stack) {
-                return Scaffold(
-                  body: Center(child: Text('$err')),
-                );
+                return CuteErrorScreen(error: "Meal data: ${err.toString()}");
               },
               data: (mealDataList) {
-                return Scaffold(
-                  body: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: DefaultTabController(
-                        length: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Your Feed",
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            const TabBar(
-                              tabs: [
-                                Tab(text: "Sugar Levels"),
-                                Tab(text: "Food Items"),
-                                Tab(text: "Activities"),
-                              ],
-                            ),
-                            Expanded(
-                              child: TabBarView(
-                                children: [
-                                  SugarDataListView(
-                                      sugarData: sugarDataList, ref: ref),
-                                  _buildMealList(context, mealDataList),
+                return activityData.when(
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (err, stack) {
+                    return CuteErrorScreen(
+                      error: "Activity: ${err.toString()}",
+                    );
+                  },
+                  data: (activityDataList) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text("Your Feed", style: textTheme.titleLarge),
+                      ),
+                      body: SafeArea(
+                        child: DefaultTabController(
+                          length: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const TabBar(
+                                tabs: [
+                                  Tab(text: "Sugar Levels"),
+                                  Tab(text: "Food Items"),
+                                  Tab(text: "Activities"),
                                 ],
                               ),
+                              Expanded(
+                                child: TabBarView(
+                                  children: [
+                                    SugarDataListView(
+                                        sugarData: sugarDataList, ref: ref),
+                                    MealListView(
+                                        mealDataList: mealDataList,
+                                        theme: theme),
+                                    ActivityListView(
+                                      theme: theme,
+                                      activityDataList: activityDataList,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      floatingActionButton: Align(
+                        alignment: Alignment.bottomRight,
+                        child: ExpandableFab(
+                          distance: 56.0,
+                          children: [
+                            ActionButton(
+                              onPressed: () =>
+                                  showPostSugarLevelsBottomSheet(context),
+                              label: "Add sugar levels",
+                              context: context,
+                            ),
+                            ActionButton(
+                              onPressed: () =>
+                                  showPostSugarLevelsBottomSheet(context),
+                              label: "Add sugar levels",
+                              context: context,
+                            ),
+                            ActionButton(
+                              onPressed: () =>
+                                  showPostSugarLevelsBottomSheet(context),
+                              label: "Add sugar levels",
+                              context: context,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                  floatingActionButton: Align(
-                    alignment: Alignment.bottomRight,
-                    child: ExpandableFab(
-                      distance: 56.0,
-                      children: [
-                        ActionButton(
-                          onPressed: () {
-                            showModalBottomSheet<void>(
-                              context: context, // Pass the context here
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return SingleChildScrollView(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom,
-                                    ),
-                                    child: const PostSugarLevelsBottomSheet(),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          label: "Add sugar levels",
-                          context: context,
-                        ),
-                        ActionButton(
-                          onPressed: () {
-                            showModalBottomSheet<void>(
-                              context: context, // Pass the context here
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return SingleChildScrollView(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom,
-                                    ),
-                                    child: const PostSugarLevelsBottomSheet(),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          label: "Add sugar levels",
-                          context: context,
-                        ),
-                        ActionButton(
-                          onPressed: () {
-                            showModalBottomSheet<void>(
-                              context: context, // Pass the context here
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return SingleChildScrollView(
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom,
-                                    ),
-                                    child: const PostSugarLevelsBottomSheet(),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          label: "Add sugar levels",
-                          context: context,
-                        ),
-                      ],
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             );
           },
         );
+      },
+    );
+  }
+}
+
+void showPostSugarLevelsBottomSheet(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return SingleChildScrollView(
+        child: Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const Text('Placeholder content'), // Add your content here
+        ),
+      );
+    },
+  );
+}
+
+class MealListView extends StatelessWidget {
+  final List<Meal> mealDataList;
+  final ThemeData theme;
+
+  const MealListView({
+    Key? key,
+    required this.mealDataList,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mealsGroupedByType = groupBy(mealDataList, (Meal m) => m.mealType);
+
+    return ListView.builder(
+      itemCount: mealsGroupedByType.keys.length,
+      itemBuilder: (context, index) {
+        final mealType = mealsGroupedByType.keys.elementAt(index);
+        final mealsOfThisType = mealsGroupedByType[mealType]!;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                mealType.toString().split('.').last.toUpperCase(),
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+            ...mealsOfThisType.map((meal) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 4, right: 4),
+                child: Card(
+                  color: Theme.of(context).colorScheme.surface,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: ListTile(
+                    title: Text(meal.mealName),
+                    subtitle: Text(
+                        '${meal.carbs}g Carbs, ${meal.protein}g Protein, ${meal.fat}g Fat'),
+                    trailing: Text(
+                      '${meal.calories} Calories',
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ActivityListView extends StatelessWidget {
+  final List<Activities> activityDataList;
+  final ThemeData theme;
+
+  const ActivityListView({
+    Key? key,
+    required this.activityDataList,
+    required this.theme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: activityDataList.length,
+      itemBuilder: (context, index) {
+        final activity = activityDataList[index];
+        return Padding(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Card(
+              color: Theme.of(context).colorScheme.surface,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ListTile(
+                title: Text(activity.activity_type),
+                subtitle: Text('Intensity: ${activity.intensity}'),
+                leading: const Icon(Icons.directions_run),
+                trailing: Text(
+                  '${activity.duration} mins',
+                  style: theme.textTheme.bodyLarge,
+                ),
+              ),
+            ));
       },
     );
   }

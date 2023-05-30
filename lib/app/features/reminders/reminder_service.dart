@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -31,7 +32,8 @@ class NotificationService {
         InitializationSettings(android: initializationSettingsAndroid);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    print("Notification plugin initialized."); // This will print to console
+    debugPrint(
+        "Notification plugin initialized."); // This will print to console
   }
 
   Future<void> showScheduledLocalNotification({
@@ -65,7 +67,7 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
-    print(
+    debugPrint(
         "Scheduled local notification with ID: $id"); // This will print to console
   }
 

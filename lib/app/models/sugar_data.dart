@@ -9,13 +9,10 @@ class SugarData {
   String? personId;
   DateTime? createdAt;
   int? sugarLevel;
+  bool? fasting;
 
-  SugarData({
-    this.id,
-    this.personId,
-    this.createdAt,
-    this.sugarLevel,
-  });
+  SugarData(
+      {this.id, this.personId, this.createdAt, this.sugarLevel, this.fasting});
 
   Map<String, dynamic> toMap() {
     return {
@@ -23,13 +20,14 @@ class SugarData {
       'personId': this.personId,
       'createdAt': this.createdAt,
       'sugarLevel': this.sugarLevel,
+      'fasting': this.fasting,
     };
   }
 
   factory SugarData.fromJson(dynamic json) {
     return SugarData(
       id: json['id'] as int,
-      personId: json['personId'] as String ?? json['patient_id'] as String,
+      personId: json['personId'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       sugarLevel: json['sugar_level'] as int,
     );
@@ -56,6 +54,7 @@ class SugarData {
           id: data['id'],
           personId: data['personId'],
           sugarLevel: data['sugar_level'],
+          fasting: data['fasting'],
           createdAt: correctFormat));
     }
     return sugarLevels;

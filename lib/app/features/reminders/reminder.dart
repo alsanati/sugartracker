@@ -107,91 +107,101 @@ class _ReminderFormState extends State<ReminderForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Set Reminder'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(
+        title: const Text('Set Reminder'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.all(12),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _messageController,
+                  decoration: const InputDecoration(
+                    labelText: 'Message',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.all(12),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a message';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Title',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a title';
+                    const Text('Time:', style: TextStyle(fontSize: 16)),
+                    TextButton(
+                      onPressed: () async {
+                        final TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: _selectedTime,
+                        );
+                        if (selectedTime != null) {
+                          setState(() {
+                            _selectedTime = selectedTime;
+                          });
                         }
-                        return null;
                       },
-                    ),
-                    TextFormField(
-                      controller: _messageController,
-                      decoration: const InputDecoration(
-                        labelText: 'Message',
+                      child: Text(
+                        _selectedTime.format(context),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a message';
-                        }
-                        return null;
-                      },
                     ),
                     Row(
                       children: [
-                        Row(
-                          children: [
-                            const Text('Time:'),
-                            const SizedBox(width: 10),
-                            TextButton(
-                              onPressed: () async {
-                                final TimeOfDay? selectedTime =
-                                    await showTimePicker(
-                                  context: context,
-                                  initialTime: _selectedTime,
-                                );
-                                if (selectedTime != null) {
-                                  setState(() {
-                                    _selectedTime = selectedTime;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                _selectedTime.format(context),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _isRecurring,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isRecurring = value ?? false;
-                                });
-                              },
-                            ),
-                            const Text('Recurring'),
-                          ],
-                        ),
-                        ElevatedButton(
-                          onPressed: _saveReminder,
-                          child: const Text('Save Reminder'),
+                        const Text('Recurring', style: TextStyle(fontSize: 16)),
+                        Checkbox(
+                          value: _isRecurring,
+                          onChanged: (value) {
+                            setState(() {
+                              _isRecurring = value ?? false;
+                            });
+                          },
                         ),
                       ],
                     ),
-                  ]),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _saveReminder,
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Text('Save Reminder',
+                        style: TextStyle(fontSize: 16)),
+                  ),
+                ),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -241,23 +251,34 @@ class _ReminderListState extends State<ReminderList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.all(16),
       itemCount: _reminders.length,
       itemBuilder: (context, index) {
         final reminder = _reminders[index];
         return Card(
+          margin: const EdgeInsets.only(bottom: 16),
+          color: Theme.of(context).colorScheme.surface,
           child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             title: Text(reminder.title,
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Message: ${reminder.message}"),
-                Text("Time: ${reminder.time.format(context)}"),
-                Text("Recurring: ${reminder.recurring ? "Yes" : "No"}"),
+                const SizedBox(height: 8),
+                Text("Message: ${reminder.message}",
+                    style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 4),
+                Text("Time: ${reminder.time.format(context)}",
+                    style: const TextStyle(fontSize: 16)),
+                const SizedBox(height: 4),
+                Text("Recurring: ${reminder.recurring ? "Yes" : "No"}",
+                    style: const TextStyle(fontSize: 16)),
               ],
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.delete),
+              icon: Icon(Icons.delete,
+                  color: Theme.of(context).colorScheme.onSurface),
               onPressed: () => _deleteReminder(reminder.id),
             ),
           ),

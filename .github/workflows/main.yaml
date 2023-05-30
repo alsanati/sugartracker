@@ -1,0 +1,24 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # or: 'beta', 'dev' or 'master'
+      - name: Upgrade Dart
+        run: dart pub upgrade
+      - name: Upgrade Flutter
+        run: flutter upgrade
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build APK
+        run: flutter build apk

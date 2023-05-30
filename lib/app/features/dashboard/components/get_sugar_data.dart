@@ -56,10 +56,13 @@ class _PostSugarLevelsBottomSheetState
         final userId = supabase.auth.currentUser?.id;
         final patientId = await supabase.patient.getCurrentPatientId();
         final sugarLevels = _sugarLevelController.text;
+        final isFasting =
+            _mealGroupValue == 0 ? true : false; // Get the selected meal type
         final response = await supabase.from('diabetes_sugar').insert({
           'personId': userId,
           'sugar_level': sugarLevels,
-          'patient_id': patientId
+          'patient_id': patientId,
+          'fasting': isFasting, // Add the meal type to the insert data
         });
         if (mounted) {
           context.showSnackBar(
@@ -147,7 +150,7 @@ class _PostSugarLevelsBottomSheetState
                     2,
                     (int index) {
                       return ChoiceChip(
-                        label: Text(index == 0 ? 'Fasting' : 'After Meal'),
+                        label: Text(index == 0 ? 'Fasting' : '2hrs after Meal'),
                         selected: _mealGroupValue == index,
                         onSelected: (bool selected) {
                           setState(() {

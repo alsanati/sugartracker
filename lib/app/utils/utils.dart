@@ -2,21 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
 import 'package:sugar_tracker/app/features/dashboard/state/homepage_state.dart';
 import 'package:sugar_tracker/app/modules/supabase_modules.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-extension NavigationHelper on BuildContext {
-  static const String homePage = '/home';
-  static const String settingsPage = '/settings';
-  static const String stepperPage = '/stepper';
-
-  void go(String page) {
-    GoRouter.of(this).go(page);
-  }
-}
 
 extension SupabasePatient on SupabaseClient {
   SupabaseHelpers get patient => SupabaseHelpers(this);
@@ -59,7 +48,9 @@ class MyMarkDownWidget extends ConsumerWidget {
 
       return reportAsyncValue.when(
         data: (String data) => Markdown(data: data),
-        loading: () => const CircularProgressIndicator(),
+        loading: () => const Center(
+            child: SizedBox(
+                height: 50, width: 50, child: CircularProgressIndicator())),
         error: (error, stack) => Center(
           child: Text('Error: $error'),
         ),

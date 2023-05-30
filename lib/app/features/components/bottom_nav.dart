@@ -7,52 +7,48 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
   @override
   State<CustomBottomNavigationBar> createState() =>
-      _CustomBottomNavigationbarState();
+      _CustomBottomNavigationBarState();
 }
 
-class _CustomBottomNavigationbarState extends State<CustomBottomNavigationBar> {
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+  int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: onTap,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.feed), label: 'Feed'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        elevation: 2000,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        onDestinationSelected: onTap,
+        selectedIndex: currentPageIndex,
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.feed), label: 'Feed'),
+          NavigationDestination(icon: Icon(Icons.history), label: 'History'),
+          NavigationDestination(
               icon: Icon(Icons.account_tree), label: 'Account'),
         ],
       ),
     );
   }
 
-  int _calculateSelectedIndex(BuildContext context) {
-    final GoRouter route = GoRouter.of(context);
-    final String location = route.location;
-    if (location.startsWith('/home')) {
-      return 0;
-    }
-    if (location.startsWith('/search')) {
-      return 1;
-    }
-    if (location.startsWith('/account')) {
-      return 2;
-    }
-    return 0;
-  }
-
   void onTap(int value) {
+    setState(() {
+      currentPageIndex = value;
+    });
     switch (value) {
       case 0:
-        return context.go('/home');
+        GoRouter.of(context).go('/home');
+        break;
       case 1:
-        return context.go('/feed');
+        GoRouter.of(context).go('/feed');
+        break;
       case 2:
-        return context.go('/account');
+        GoRouter.of(context).go('/account');
+        break;
       default:
-        return context.go('/home');
+        GoRouter.of(context).go('/home');
+        break;
     }
   }
 }

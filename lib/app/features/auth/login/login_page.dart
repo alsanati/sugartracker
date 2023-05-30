@@ -143,9 +143,28 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      // Perform Google authentication
+                      _isLoading ? null : _supabaseAuth.signInWithGoogle();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                    ),
+                    icon: const Icon(Icons.login),
+                    label: const Text(
+                      'Sign in with Google',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
